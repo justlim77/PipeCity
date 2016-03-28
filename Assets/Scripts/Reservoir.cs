@@ -19,7 +19,7 @@ public class Reservoir : MonoBehaviour {
 	public float refillRate = 0.1F;
 	public float autoRefillRate = 10F;
 
-	bool onCD;
+	//bool onCD;
 
 	public List<GameObject> connectedBuildings = new List<GameObject> ();
 
@@ -66,21 +66,19 @@ public class Reservoir : MonoBehaviour {
 		}
 	}
 
-	public IEnumerator Cooldown ()
-	{
-		onCD = true;
-		yield return new WaitForSeconds (1);
-		onCD = false;
-	}
+	//public IEnumerator Cooldown ()
+	//{
+	//	onCD = true;
+	//	yield return new WaitForSeconds (1);
+	//	onCD = false;
+	//}
 
 	public void AutoRefill ()
 	{
-
-			if (currentCapacity < maxCapacity / 2 && waterManager.currentWater > waterManager.minWater) {
-				//StartCoroutine (Cooldown ());
-					currentCapacity += 25F;
-					waterManager.currentWater -= 25F;
-			}
+		if (currentCapacity < maxCapacity / 2 && waterManager.currentWater > waterManager.minWater) {
+			currentCapacity += 25F;
+			waterManager.currentWater -= 25F;
+		}
 	}
 
 	void HandleWaterLevel ()

@@ -26,12 +26,12 @@ public class WaterManager : MonoBehaviour {
 	private int initLevel = 1;
 	private int currentLevel;
 	
-	public float totalWaterOutput;
-	public float rainWaterOutput;
-	public float permwasteWaterOutput;
-	public float tempwasteWaterOutput;
-	public float wasteWaterOutput;
-	public float seaWaterOutput;
+	public static float TotalWaterOutput;
+	public static float RainWaterOutput;
+	public static float PermWasteWaterOutput;
+	public static float TempWasteWaterOutput;
+	public static float WasteWaterOutput;
+	public static float SeaWaterOutput;
 	
 	RainManager rainManager;
 	
@@ -42,12 +42,10 @@ public class WaterManager : MonoBehaviour {
 		Lose
 	}
 	
-	private int CurrentLevel
+	public int CurrentLevel
 	{
 		get { return currentLevel; }
-		set {
-			currentLevel = value;
-		}
+		set { currentLevel = value; }
 	}
 	
 	void Awake  ()
@@ -129,7 +127,7 @@ public class WaterManager : MonoBehaviour {
 			{
 				StartCoroutine (Cooldown ());
 				ConditionalOutput ();
-				waterText.text = "" + ComputeOutputRate (rainWaterOutput, wasteWaterOutput, seaWaterOutput).ToString ("F1") 
+				waterText.text = "" + ComputeOutputRate (RainWaterOutput, WasteWaterOutput, SeaWaterOutput).ToString ("F1") 
 					+ " units generated per day";
 			}
 		}
@@ -154,51 +152,51 @@ public class WaterManager : MonoBehaviour {
 		return outputRate;
 	}
 	
-	public void ComputeTotalOutput (float rain, float waste, float sea)
+	public static void ComputeTotalOutput (float rain, float waste, float sea)
 	{
-		totalWaterOutput += rain + waste + sea;
+		TotalWaterOutput += rain + waste + sea;
 	}
 
-	public void ComputeRainOutput (float rainOutput)
+	public static void ComputeRainOutput (float rainOutput)
 	{
-		rainWaterOutput += rainOutput;
+		RainWaterOutput += rainOutput;
 	}
 
-	public void ComputeWasteOutput (float wasteOutput, bool isPermanent)
+	public static void ComputeWasteOutput (float wasteOutput, bool isPermanent)
 	{
 		//wasteWaterOutput = 0;	// Reset temp waste water output
 
 		if (isPermanent)
-			permwasteWaterOutput += wasteOutput;
+			PermWasteWaterOutput += wasteOutput;
 		else {
-			wasteWaterOutput = tempwasteWaterOutput;
+			WasteWaterOutput = TempWasteWaterOutput;
 		}
 	}
 
-	public void ComputeSeaOutput (float seaOutput)
+	public static void ComputeSeaOutput (float seaOutput)
 	{
-		seaWaterOutput += seaOutput;
+		SeaWaterOutput += seaOutput;
 	}
 
 	void ConditionalOutput ()
 	{
 		if (rainManager.isRaining) {
 			//ComputeTotalOutput (rainWaterOutput, 0, seaWaterOutput);
-			currentWater += rainWaterOutput + wasteWaterOutput + seaWaterOutput;
+			currentWater += RainWaterOutput + WasteWaterOutput + SeaWaterOutput;
 		} else {
-			currentWater += 0 + wasteWaterOutput + seaWaterOutput;
+			currentWater += 0 + WasteWaterOutput + SeaWaterOutput;
 		}
 	}
 
 	public void ResetDrainOutput ()
 	{
-		tempwasteWaterOutput = 0;	// Reset temp water output to 0
-		wasteWaterOutput = 0;
+		TempWasteWaterOutput = 0;	// Reset temp water output to 0
+		WasteWaterOutput = 0;
 	}
 
-	public void ComputeBuildingOutput ()
+	public static void ComputeBuildingOutput ()
 	{
-		tempwasteWaterOutput += permwasteWaterOutput;
+		TempWasteWaterOutput += PermWasteWaterOutput;
 	}
 
 	void MaxCapacityClamp ()

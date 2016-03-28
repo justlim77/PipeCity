@@ -126,17 +126,17 @@ public class CameraFit : MonoBehaviour
 	
 	private void ComputeResolution()
 	{
-		float deviceWidth;
-		float deviceHeight;
+		//float deviceWidth;
+		//float deviceHeight;
 		float leftX, rightX, topY, bottomY;
 		
-		#if UNITY_EDITOR
-		deviceWidth = GetGameView().x;
-		deviceHeight = GetGameView().y;
-		#else
-		deviceWidth = Screen.width;
-		deviceHeight = Screen.height;
-		#endif
+		//#if UNITY_EDITOR
+		//deviceWidth = GetGameView().x;
+		//deviceHeight = GetGameView().y;
+		//#else
+		//deviceWidth = Screen.width;
+		//deviceHeight = Screen.height;
+		//#endif
 		
 		GetComponent<Camera>().orthographicSize = 1f / GetComponent<Camera>().aspect * UnitsForWidth / 2f;
 		

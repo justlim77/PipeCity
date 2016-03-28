@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class TitleManager : MonoBehaviour {
@@ -16,7 +16,7 @@ public class TitleManager : MonoBehaviour {
 	{
 		float fadeTime = fader.BeginFade(1);
 		yield return new WaitForSeconds(fadeTime);
-		Application.LoadLevel(Application.loadedLevel + 1);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 	}
 	
 }

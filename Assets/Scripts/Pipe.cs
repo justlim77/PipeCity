@@ -46,7 +46,7 @@ public class Pipe {
 		hasWater = _hasWater;
 		pipeHealth = health;
 	
-		pipeIcon = Resources.Load<Sprite> ("Sprites/Pipes/" + name);
+		pipeIcon = Resources.Load<Sprite> ("sprites/ui/pipes/" + name);
 	}
 
 	public Pipe ()

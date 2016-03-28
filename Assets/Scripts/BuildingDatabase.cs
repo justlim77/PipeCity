@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class BuildingDatabase : MonoBehaviour {
 
-    [SerializeField] string path = "Sprites/Buildings/";
+    //[SerializeField] string path = "Sprites/Buildings/";
     [SerializeField] Building[] buildings;
 
     static List<Building> _Buildings = new List<Building>();

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class CloudDatabase : MonoBehaviour {
 
-    [SerializeField] string path = "Sprites/Clouds";
     [SerializeField] Sprite[] cloudSprites;
 
     static List<Cloud> _Clouds = new List<Cloud>();

@@ -4,45 +4,21 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
-	FadeMain fadeMain;
-
-	UpgradeManager upgradeManager;
-	TimeManager timeManager;
-
 	void Awake ()
 	{
-		fadeMain = GameObject.Find ("Managers").GetComponent<FadeMain> ();
-		upgradeManager = GameObject.Find ("UpgradeManager").GetComponent<UpgradeManager> ();
-		timeManager = GameObject.Find ("TimeManager").GetComponent<TimeManager> ();
-	}
-
-	// Use this for initialization
-	void Start ()
-	{
-	
 	}
 	
-	// Update is called once per frame
-	void Update ()
+	void Update()
 	{
-		// Debug
-		//CheckGameWin ();
-
-		if (timeManager.currentYear >= timeManager.sustenanceYear) {
+		if (TimeManager.EndYear)
 			CheckGameWin ();
-		}
-
-		
 	}
 
-	void CheckGameWin ()
+	void CheckGameWin()
 	{
-		if (UpgradeManager.catchmentUpgradeCount >= 3 && UpgradeManager.reclamationUpgradeCount >= 3 && 
-			UpgradeManager.desalinationUpgradeCount >= 3) {
-			StartCoroutine (fadeMain.ChangeLevel (1));
-		} else {
-			StartCoroutine (fadeMain.ChangeLevel (2));
-		}
+		if (UpgradeManager.AllUpgradesPurchased()) {
+			StartCoroutine (FadeMain.ChangeLevel (1));
+		} else
+			StartCoroutine (FadeMain.ChangeLevel (2));
 	}
-
 }

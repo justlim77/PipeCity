@@ -1,30 +1,28 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class FadeMain : MonoBehaviour {
 
-	Fader fader;
 	public static bool reduceVolume = false;
+	static Fader _fader;
 
 	void Awake ()
 	{
-		fader = GameObject.Find ("Managers").GetComponent<Fader> ();
+		_fader = GameObject.Find("Managers").GetComponent<Fader> ();
 	}
 
-	public IEnumerator ChangeLevel(int level)
+	public static IEnumerator ChangeLevel(int level)
 	{
-		float fadeTime = fader.BeginFade(1);
+		float fadeTime = _fader.BeginFade(1);
 		reduceVolume = true;
 		yield return new WaitForSeconds(fadeTime);
-		Application.LoadLevel(Application.loadedLevel + level);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + level);
 	}
 	
 	void Update()
 	{
-		if(Input.GetKeyDown(KeyCode.W))
-		{
+		if(Input.GetKeyUp(KeyCode.W))
 			StartCoroutine(ChangeLevel(1));
-		}
 	}
 }
