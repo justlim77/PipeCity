@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,9 +7,6 @@ public class InputManager2 : MonoBehaviour {
 
 	Fader fader;
 	public static bool reduceVolume = false;
-
-	//sound
-	public AudioSource audioSource;
 
 	// Canvas controls
 	public GameObject upgradeMenu;
@@ -54,22 +50,22 @@ public class InputManager2 : MonoBehaviour {
 	public static Color opaque =  new Color (1, 1, 1, 1.0f);
 
 	// Hierarchy Sorting Order
-	private GameObject go_year;
-	private GameObject go_fund;
-	private GameObject go_timer;
-	private GameObject go_water;
-	private GameObject go_inventory;
-	private GameObject go_hotbar;
-	private int inventoryOrder;
-	private int hotbarOrder;
-	private int bronzeOrder;
-	private int silverOrder;
-	private int tooltipOrder;
-	private int pausepanelOrder;
-	private int yearOrder;
-	private int fundOrder;
-	private int timerOrder;
-	private int waterOrder;
+	GameObject go_year;
+	GameObject go_fund;
+	GameObject go_timer;
+	GameObject go_water;
+	GameObject go_inventory;
+	GameObject go_hotbar;
+	int inventoryOrder;
+	int hotbarOrder;
+	int bronzeOrder;
+	int silverOrder;
+	int tooltipOrder;
+	int pausepanelOrder;
+	int yearOrder;
+	int fundOrder;
+	int timerOrder;
+	int waterOrder;
 
 	// Cancel controls
 	public static GameObject mousedOverGrid;		// Returns gameobject from "Grid" script pointerEnter
@@ -105,43 +101,43 @@ public class InputManager2 : MonoBehaviour {
 
 	void Awake ()
 	{
-		fader = GameObject.Find ("Managers").GetComponent<Fader> ();
+		fader = GameObject.Find ("Managers").GetComponent<Fader>();
 
 		upgradeMenu = GameObject.Find ("UpgradeMenu");
-		upgradeMenuCanvas = upgradeMenu.GetComponent<CanvasGroup> ();
+		upgradeMenuCanvas = upgradeMenu.GetComponent<CanvasGroup>();
 		upgradeMenuCanvas.alpha = 0;
 
 		helpMenu = GameObject.Find ("HelpCanvas");
-		helpMenuCanvas = helpMenu.GetComponent<CanvasGroup> ();
+		helpMenuCanvas = helpMenu.GetComponent<CanvasGroup>();
 		helpMenuCanvas.alpha = 0;
 
 		go_year = GameObject.Find ("Year");
 		go_fund = GameObject.Find ("Fund");
 		go_timer = GameObject.Find ("Timer");
 		go_water = GameObject.Find ("Water");
-		go_inventory = GameObject.FindGameObjectWithTag ("Inventory");
+		go_inventory = GameObject.FindGameObjectWithTag("Inventory");
 		go_hotbar = GameObject.Find ("Hotbar");
 
 		pauseMenu = GameObject.Find ("PauseMenu");															// Return gameobject PausePanel by name
-		pauseMenuCanvas = pauseMenu.GetComponent<CanvasGroup> ();											// Return canvas group component
-		interactivePanelCanvas = pauseMenu.transform.GetChild (0).GetComponentInChildren<CanvasGroup> ();
+		pauseMenuCanvas = pauseMenu.GetComponent<CanvasGroup>();											// Return canvas group component
+		interactivePanelCanvas = pauseMenu.transform.GetChild (0).GetComponentInChildren<CanvasGroup>();
 
-		inventory = GameObject.FindGameObjectWithTag ("Inventory").GetComponent<Inventory> ();
-		img_tooltip = GameObject.Find ("Tooltip").GetComponent<Image> ();									// Return Tooltip game object's Image component
-		tooltipCanvas = img_tooltip.GetComponent<CanvasGroup> ();											// Return Tooltip's CanvasGroup component
+		inventory = GameObject.FindGameObjectWithTag ("Inventory").GetComponent<Inventory>();
+		img_tooltip = GameObject.Find ("Tooltip").GetComponent<Image>();									// Return Tooltip game object's Image component
+		tooltipCanvas = img_tooltip.GetComponent<CanvasGroup>();											// Return Tooltip's CanvasGroup component
 		//fl_offset = tooltip.rectTransform.sizeDelta.x / 2;												// Offset for rotation pivot
 
 		bronzeGrid = GameObject.Find ("BronzeGrid");
 		silverGrid = GameObject.Find ("SilverGrid");
 
-		bronzeList = bronzeGrid.GetComponent<GridLayout> ().GridSlots;
-		silverList = silverGrid.GetComponent<GridLayout> ().GridSlots;
+		bronzeList = bronzeGrid.GetComponent<GridLayout>().GridSlots;
+		silverList = silverGrid.GetComponent<GridLayout>().GridSlots;
 
 		mousedOverGrid = null;
 		isRecycle = false;
 		isFix = false;
-		recycleCursor = Resources.Load <Texture2D> ("GUI/TracyMouseCursor1");
-		fixCursor = Resources.Load <Texture2D> ("GUI/TracyFixCursor");
+		recycleCursor = Resources.Load<Texture2D>("GUI/TracyMouseCursor1");
+		fixCursor = Resources.Load<Texture2D>("GUI/TracyFixCursor");
 	}
 
 	void Start ()
@@ -208,9 +204,7 @@ public class InputManager2 : MonoBehaviour {
 	void PauseControl ()
 	{
 		if(Input.GetKeyUp (pauseKey))
-		{
 			_isPaused = !_isPaused;								// Switch between paused and not paused
-		}
 
 		if(_isPaused)
 		{
@@ -221,8 +215,7 @@ public class InputManager2 : MonoBehaviour {
 			interactivePanelCanvas.ignoreParentGroups = true; 	// Ignore parent setting
 			Time.timeScale = 0;									// Time.timeScale 0 to pause game
 		}
-
-		else if (!_isPaused)
+		else
 		{
 			pauseMenu.SetActive (false);						// Disable game object
 			pauseMenuCanvas.alpha = 0;							// Set to fully invisible
@@ -253,7 +246,6 @@ public class InputManager2 : MonoBehaviour {
 			//PauseToggle (_isPaused);
 			//Application.LoadLevel(0);
 			StartCoroutine(ChangeLevel());
-
 		}
 	}
 
@@ -268,36 +260,24 @@ public class InputManager2 : MonoBehaviour {
 
 	void TimeControl ()
 	{
-		if(Input.GetKeyDown (speedtimeupKey) && !_isPaused)
-		{
+		if(Input.GetKeyUp(speedtimeupKey) && !_isPaused)
 			fl_currentTime += fl_timeIncrease;
-		}
 
-		if(Input.GetKeyDown (slowtimedownKey) && !_isPaused)
-		{
+		if(Input.GetKeyUp(slowtimedownKey) && !_isPaused)
 			if(fl_currentTime > 0)
-			{
 				fl_currentTime -= fl_timeIncrease;
-			}
-		}
 
-		if(Input.GetKeyDown (normalizetimeKey) && !_isPaused)
-		{
+		if(Input.GetKeyUp(normalizetimeKey) && !_isPaused)
 			fl_currentTime = 1;
-		}
 	}
 
 	void FundControl ()
 	{
-		if(Input.GetKeyDown (upFund) && !_isPaused)
-		{
+		if(Input.GetKeyUp(upFund) && !_isPaused)
 			FundManager.totalFund += fundIncrease;
-		}
 
-		if(Input.GetKeyDown (downFund) && !_isPaused)
-		{
+		if(Input.GetKeyUp (downFund) && !_isPaused)
 			FundManager.totalFund -= fundIncrease;
-		}
 	}
 
 	#region Tooltip Control Methods [Moving, Rotating, Switching, Assigning, Cancelling]
@@ -388,21 +368,12 @@ public class InputManager2 : MonoBehaviour {
 		}
 
 		if(Input.GetMouseButtonDown (cleartooltipKey) && !_isPaused)
-		{
-			/*
-			if(mousedOverGrid == null)
-			{
-				CancelTooltip ();
-			}
-			*/
-
 			CancelTooltip ();
-		}
 	}
 
 	void RotationControl ()
 	{
-		audioSource.PlayOneShot (InventorySound.rotatePipeSound, 0.5f);
+		AudioManager.Instance.PlaySFX(AudioDatabase.rotatePipeSound);
 		currentRotation -= 90;
 		img_tooltip.rectTransform.rotation = Quaternion.Euler (0, 0, currentRotation);
 	}
@@ -520,29 +491,26 @@ public class InputManager2 : MonoBehaviour {
 
 	public void CursorControl ()
 	{
-		if (Slot._isDragging) {
+		if (Slot._isDragging)
 			Cursor.visible = false;
-		} else {
+        else
 			Cursor.visible = true;
-		}
 
 		if (Input.GetKeyDown (recycleKey) && !Slot._isDragging) {
 			isRecycle = true;
 			isFix = false;
 		}
 
-		if (isRecycle) {
+		if (isRecycle)
 			Cursor.SetCursor (recycleCursor, hotSpot, cursorMode);
-		}
 
 		if (Input.GetKeyDown (fixKey) && !Slot._isDragging) {
 			isFix = true;
 			isRecycle = false;
 		}
 
-		if (isFix) {
+		if (isFix)
 			Cursor.SetCursor (fixCursor, hotSpot, cursorMode);
-		}
 
 		if (Input.GetMouseButtonDown (cleartooltipKey)) {
 			isRecycle = false;

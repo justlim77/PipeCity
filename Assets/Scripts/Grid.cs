@@ -36,20 +36,21 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 	public GridLayout gridLayout;
 	public GridLayout bronzeLayout;
 
-	public AudioSource audioSource;
-	public AudioSource splashAudioSource;
     public float sfxVolume = 0.25f;
 
     public float counter = 0;
 	public int interval = 1;
 	public float decay = 1F;
 
+    Image _image;
+    Reservoir _reservoir;
+
 	void Awake ()
 	{
-		splashAudioSource = gameObject.AddComponent<AudioSource>();
-
 		pipeImage.SetActive (false);
-		img_pipe = pipeImage.GetComponent<Image> ();
+        _image = GetComponent<Image>();
+        _reservoir = GetComponent<Reservoir>();
+        img_pipe = pipeImage.GetComponent<Image> ();
 		img_tooltip = GameObject.Find ("Tooltip").GetComponent<Image> ();
 		tooltipCanvasGroup = img_tooltip.GetComponent<CanvasGroup> ();
 		pipeDatabase = GameObject.Find ("PipeDatabase").GetComponent<PipeDatabase> ();
@@ -61,8 +62,6 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 
 	void Start ()
 	{
-		audioSource = gameObject.AddComponent<AudioSource>();
-
 		bronzeLayout = GameObject.FindGameObjectWithTag ("Bronze").GetComponent<GridLayout> ();
 		gridLayout = this.GetComponentInParent<GridLayout> ();
 
@@ -129,7 +128,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 	{
 		if (img_pipe.sprite == null && img_tooltip.sprite != null)
 		{
-			if (this.transform.parent.tag == "Bronze" && Slot.clickedPipe.pipeType == Pipe.PipeType.Bronze && FundManager.totalFund >= Slot.clickedPipe.pipePrice)
+			if (transform.parent.tag == "Bronze" && Slot.clickedPipe.pipeType == Pipe.PipeType.Bronze && FundManager.totalFund >= Slot.clickedPipe.pipePrice)
 			{
 				pipe = new Pipe (Slot.clickedPipe.pipeName, Slot.clickedPipe.pipeID, Slot.clickedPipe.pipePrice,
 				                 Slot.clickedPipe.pipeAmount, Pipe.PipeType.Bronze,
@@ -138,21 +137,21 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 				                 Slot.clickedPipe.outletCount, Slot.clickedPipe.connectedCount,
 				                 Slot.clickedPipe.isConnected, Slot.clickedPipe.hasWater, Slot.clickedPipe.pipeHealth);
 
-				pipeImage.SetActive (true);
+				pipeImage.SetActive(true);
 				img_pipe.sprite = img_tooltip.sprite;
 				FundManager.totalFund -= Slot.clickedPipe.pipePrice;
-				this.GetComponent<Image>().enabled = false;
+                _image.enabled = false;
 				img_pipe.rectTransform.rotation = Quaternion.Euler (0, 0, InputManager2.currentRotation);
 
-				InputManager2.CancelTooltip ();
+				InputManager2.CancelTooltip();
 
-				gridLayout.EvaluateGrid ();
-				bronzeLayout.EvaluateGrid ();
+				gridLayout.EvaluateGrid();
+				bronzeLayout.EvaluateGrid();
 
-				InventorySound.instance.RandomizeSfx(InventorySound.fundsound1, InventorySound.fundsound2);
+				AudioManager.Instance.RandomizeSFX(AudioDatabase.fundsound1, AudioDatabase.fundsound2);
 			}
 
-			if (this.transform.parent.tag == "Silver" && Slot.clickedPipe.pipeType == Pipe.PipeType.Silver && FundManager.totalFund >= Slot.clickedPipe.pipePrice)
+			if (transform.parent.tag == "Silver" && Slot.clickedPipe.pipeType == Pipe.PipeType.Silver && FundManager.totalFund >= Slot.clickedPipe.pipePrice)
 			{
 				pipe = new Pipe (Slot.clickedPipe.pipeName, Slot.clickedPipe.pipeID, Slot.clickedPipe.pipePrice,
 				                 Slot.clickedPipe.pipeAmount, Pipe.PipeType.Silver,
@@ -164,42 +163,41 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 				pipeImage.SetActive (true);
 				img_pipe.sprite = img_tooltip.sprite;
 				FundManager.totalFund -= Slot.clickedPipe.pipePrice;
-				this.GetComponent<Image>().enabled = false;
+                _image.enabled = false;
 				img_pipe.rectTransform.rotation = Quaternion.Euler (0, 0, InputManager2.currentRotation);
 
-				InputManager2.CancelTooltip ();
+				InputManager2.CancelTooltip();
 
-				gridLayout.EvaluateGrid ();
-				bronzeLayout.EvaluateGrid ();
+				gridLayout.EvaluateGrid();
+				bronzeLayout.EvaluateGrid();
 
-				InventorySound.instance.RandomizeSfx(InventorySound.fundsound1, InventorySound.fundsound2);
+				AudioManager.Instance.RandomizeSFX(AudioDatabase.fundsound1, AudioDatabase.fundsound2);
 			}
-
 		}
 	}
 
-	public void ClearGrid ()
+	public void ClearGrid()
 	{
 		if (img_pipe.sprite != null && !isSource)
 		{
-			pipe = pipeDatabase.pipes [0];
+			pipe = pipeDatabase.pipes[0];
 			//pipe.hasWater = false;
 			img_pipe.sprite = null;						// Clear pipe sprite'
-			pipeImage.SetActive (false);				// Turn off pipe image child
-			this.GetComponent<Image>().enabled = true;	// Turn on transparent pixel icon
+			pipeImage.SetActive(false);                // Turn off pipe image child
+            _image.enabled = true;	// Turn on transparent pixel icon
 
-			gridLayout.EvaluateGrid ();
-			bronzeLayout.EvaluateGrid ();
+			gridLayout.EvaluateGrid();
+			bronzeLayout.EvaluateGrid();
 
-			EvaluatePipeState ();
+			EvaluatePipeState();
 		}
 	}
 	
-	public void EvaluatePipeState ()
+	public void EvaluatePipeState()
 	{
 		if (!isBuilding && !isSource && isSilver) {
 			if (pipe.hasWater) {
-				DegradePipes ();
+				DegradePipes();
 				if (pipe.pipeHealth > 25F) {
 					img_pipe.color = colorWater;
 				} else if (pipe.pipeHealth < 25F) {
@@ -218,21 +216,21 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 				img_pipe.color = Color.white;
 			}
 
-			if (pipe.hasWater && this.GetComponent<Reservoir> ().currentCapacity <= 0) {
-				ToggleWater ();
+			if (pipe.hasWater && _reservoir.currentCapacity <= 0) {
+				ToggleWater();
 			}
 		}
 
 		if (isBuilding && isSilver) {
 			if (pipe.hasWater) {
-				this.GetComponent<Image> ().color = Color.white;
+				_image.color = Color.white;
 				bronzeLayout.GridSlots[this.gridNumber].GetComponent<Grid> ().pipe.hasWater = true;
 				bronzeLayout.GridSlots[this.gridNumber].GetComponent<Image> ().color = Color.white;
 				//bronzeLayout.EvaluateGrid (); // Updater fix
 
 				//waterOrigin.GetComponent<Reservoir> ().CalculateDrainRate (building.drainRate);
 			} else {
-				this.GetComponent<Image> ().color = Color.gray;
+				_image.color = Color.gray;
 				bronzeLayout.GridSlots[this.gridNumber].GetComponent<Grid> ().pipe.hasWater = false;
 				bronzeLayout.GridSlots[this.gridNumber].GetComponent<Image> ().color = Color.gray;
 				//bronzeLayout.EvaluateGrid ();
@@ -240,35 +238,20 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 		}
 
 		if (isBuilding && isBronze && isSource) {
-
 		}
 
 		if (pipe.outletCount > pipe.connectedCount && pipe.hasWater)
 		{
 			pipe.isLeaking = true;
-			if(!splashAudioSource.isPlaying)
-			{
-				PlaySplashSound();
-			}
+			if(!AudioManager.Instance.isContinuousPlaying)
+				AudioManager.Instance.PlaySFX(AudioDatabase.splashSound);
 		}
 		else 
 		{ 
 			pipe.isLeaking = false;
-			StopPlaySplashSound();
+            AudioManager.Instance.StopSFXContinuous();
 		}
 
-	}
-
-	public void PlaySplashSound()
-	{
-		splashAudioSource.clip = InventorySound.splashSound;
-        splashAudioSource.volume = sfxVolume;
-        splashAudioSource.Play();
-	}
-
-	public void StopPlaySplashSound()
-	{
-		splashAudioSource.Stop ();
 	}
 
 	public void ToggleWater ()
@@ -279,7 +262,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 		gridLayout.EvaluateGrid ();
 		bronzeLayout.EvaluateGrid ();	// [OK]
 		//EvaluatePipeState (); // <<< LateUpdate
-		audioSource.PlayOneShot (InventorySound.toggleWaterSound, sfxVolume);
+		AudioManager.Instance.PlaySFX(AudioDatabase.toggleWaterSound);
 	}
 	
 	#region IPointerEnterHandler implementation
@@ -303,14 +286,14 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 	void Refund ()
 	{
 		FundManager.totalFund += pipe.pipePrice / 2;
-		InventorySound.instance.RandomizeSfx(InventorySound.fundsound1, InventorySound.fundsound2);
+		AudioManager.Instance.RandomizeSFX(AudioDatabase.fundsound1, AudioDatabase.fundsound2);
 	}
 
 	void DegradePipes ()
 	{
 		counter += 1 * Time.deltaTime;
 		if (counter >= interval) {
-			int chance = Random.Range (1,10);
+			int chance = Random.Range(1, 10);
 			if (chance >= 5) {
 				pipe.pipeHealth -= decay;
 			}
@@ -318,7 +301,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 			counter = 0;
 		}
 
-			if (pipe.pipeHealth <= 0) { ClearGrid (); }
+		if (pipe.pipeHealth <= 0) { ClearGrid (); }
 	}
 
 	void FixPipes ()
@@ -326,7 +309,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 		if (pipe.pipeHealth < 25F && FundManager.totalFund >= 5) {
 			pipe.pipeHealth = 100F;
 			FundManager.totalFund -= 5;
-			InventorySound.instance.RandomizeSfx(InventorySound.fundsound1, InventorySound.fundsound2);
+			AudioManager.Instance.RandomizeSFX(AudioDatabase.fundsound1, AudioDatabase.fundsound2);
 		}
 	}
 }

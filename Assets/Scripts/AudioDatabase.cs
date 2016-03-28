@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InventorySound : MonoBehaviour {
+public class AudioDatabase : MonoBehaviour {
 
 	public AudioSource efxSource;
 
-	public static InventorySound instance = null;
+	public static AudioDatabase instance = null;
 
 	public AudioClip buttonHoverSoundAttach;
 	public AudioClip buttonClickSoundAttach;

@@ -51,7 +51,7 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 	{
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			audioSource.PlayOneShot(InventorySound.buttonClickSound, 0.25f);
+			audioSource.PlayOneShot(AudioDatabase.buttonClickSound, 0.25f);
 			InputManager2.CancelTooltip ();													// Reset to default state
 
 			inputScript.ResetCursor ();
@@ -74,7 +74,7 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 
 	public void OnPointerEnter (PointerEventData eventData)
 	{
-		audioSource.PlayOneShot(InventorySound.buttonHoverSound, 0.25f);
+		audioSource.PlayOneShot(AudioDatabase.buttonHoverSound, 0.25f);
 		ShowPrice ();
 	}
 

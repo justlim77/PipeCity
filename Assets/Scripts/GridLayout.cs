@@ -42,7 +42,7 @@ public class GridLayout : MonoBehaviour {
 	{
 		WaterSources = new List<GameObject> ();
 
-		rock = Resources.Load <Sprite> ("Sprites/Obstacles/rock");
+		rock = Resources.Load<Sprite>("Sprites/Obstacles/rock");
 
 		pipeDatabase = GameObject.Find ("PipeDatabase").GetComponent<PipeDatabase> ();
 		buildingDatabase = GameObject.Find ("BuildingDatabase").GetComponent<BuildingDatabase> ();

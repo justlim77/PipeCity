@@ -8,7 +8,6 @@ public class UpgradeReclamationButton : MonoBehaviour, IPointerEnterHandler, IPo
 	public GameObject priceTag;
 	public Text priceText;
 
-	public AudioSource audioSource;
 	public AudioClip buttonHoverSound;
 	public AudioClip buttonClickSound;
 
@@ -18,15 +17,6 @@ public class UpgradeReclamationButton : MonoBehaviour, IPointerEnterHandler, IPo
 		priceText = priceTag.transform.GetChild (0).GetComponent <Text> ();
 	}
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
 	#region IPointerEnterHandler implementation
 
@@ -36,13 +26,9 @@ public class UpgradeReclamationButton : MonoBehaviour, IPointerEnterHandler, IPo
 		{
 			priceTag.SetActive (true);
 			if (FundManager.totalFund >= UpgradeManager.reclamationUpgrade1 && UpgradeManager.reclamationUpgradeCount == 1)
-			{
-				audioSource.PlayOneShot(buttonHoverSound);
-			}
+                AudioManager.Instance.PlaySFX(buttonHoverSound);
 			if (FundManager.totalFund >= UpgradeManager.reclamationUpgrade2 && UpgradeManager.reclamationUpgradeCount == 2)
-			{
-				audioSource.PlayOneShot(buttonHoverSound);
-			}
+                AudioManager.Instance.PlaySFX(buttonHoverSound);
 		}
 	}
 
@@ -60,12 +46,8 @@ public class UpgradeReclamationButton : MonoBehaviour, IPointerEnterHandler, IPo
 	public void OnPointerDown(PointerEventData eventData)
 	{
 		if (FundManager.totalFund >= UpgradeManager.reclamationUpgrade1 && UpgradeManager.reclamationUpgradeCount == 1)
-		{
-			audioSource.PlayOneShot(buttonClickSound);
-		}
+            AudioManager.Instance.PlaySFX(buttonClickSound);
 		if (FundManager.totalFund >= UpgradeManager.reclamationUpgrade2 && UpgradeManager.reclamationUpgradeCount == 2)
-		{
-			audioSource.PlayOneShot(buttonClickSound);
-		}
+            AudioManager.Instance.PlaySFX(buttonClickSound);
 	}
 }

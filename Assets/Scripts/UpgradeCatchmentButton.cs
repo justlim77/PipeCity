@@ -7,8 +7,6 @@ public class UpgradeCatchmentButton : MonoBehaviour, IPointerEnterHandler, IPoin
 
 	public GameObject priceTag;
 	public Text priceText;
-
-	public AudioSource audioSource;
 	public AudioClip buttonHoverSound;
 	public AudioClip buttonClickSound;
 
@@ -16,16 +14,6 @@ public class UpgradeCatchmentButton : MonoBehaviour, IPointerEnterHandler, IPoin
 	{
 		priceTag.SetActive (false);
 		priceText = priceTag.transform.GetChild (0).GetComponent <Text> ();
-	}
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
 	}
 
 	#region IPointerEnterHandler implementation
@@ -36,13 +24,9 @@ public class UpgradeCatchmentButton : MonoBehaviour, IPointerEnterHandler, IPoin
 		{
 			priceTag.SetActive (true);
 			if (FundManager.totalFund >= UpgradeManager.catchmentUpgrade1 && UpgradeManager.catchmentUpgradeCount == 1)
-			{
-				audioSource.PlayOneShot(buttonHoverSound);
-			}
+	    		AudioManager.Instance.PlaySFX(buttonHoverSound);
 			if (FundManager.totalFund >= UpgradeManager.catchmentUpgrade2 && UpgradeManager.catchmentUpgradeCount == 2)
-			{
-				audioSource.PlayOneShot(buttonHoverSound);
-			}
+                AudioManager.Instance.PlaySFX(buttonHoverSound);
 		}
 	}
 
@@ -60,12 +44,8 @@ public class UpgradeCatchmentButton : MonoBehaviour, IPointerEnterHandler, IPoin
 	public void OnPointerDown(PointerEventData eventData)
 	{
 		if (FundManager.totalFund >= UpgradeManager.catchmentUpgrade1 && UpgradeManager.catchmentUpgradeCount == 1)
-		{
-			audioSource.PlayOneShot(buttonClickSound);
-		}
+            AudioManager.Instance.PlaySFX(buttonClickSound);
 		if (FundManager.totalFund >= UpgradeManager.catchmentUpgrade2 && UpgradeManager.catchmentUpgradeCount == 2)
-		{
-			audioSource.PlayOneShot(buttonClickSound);
-		}
+            AudioManager.Instance.PlaySFX(buttonClickSound);
 	}
 }

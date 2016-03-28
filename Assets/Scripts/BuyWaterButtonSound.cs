@@ -5,32 +5,30 @@ using System.Collections;
 
 public class BuyWaterButtonSound : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler {
 
-	public AudioSource audioSource;
 	public AudioClip buttonHoverSound;
 	public AudioClip fundClickSound;
 
 	FundManager fundManager;
 	WaterManager waterManager;
+    Button _button;
 
 	void Awake ()
 	{
 		fundManager = GameObject.Find ("FundManager").GetComponent<FundManager> ();
 		waterManager = GameObject.Find ("WaterManager").GetComponent<WaterManager> ();
+        _button = GetComponent<Button>();
 	}
 
 	public void OnPointerEnter (PointerEventData eventData)
 	{
-		if (transform.GetComponent<Button> ().interactable == true) {
-			audioSource.PlayOneShot (buttonHoverSound);
-		}
+		if (_button.interactable)
+            AudioManager.Instance.PlaySFX(buttonHoverSound);
 	}
 
-	public void OnPointerDown(PointerEventData eventData)
-	{
-		if (FundManager.totalFund >= fundManager.importedwaterCost && waterManager.currentWater < waterManager.maxWater) {
-			if (transform.GetComponent<Button> ().interactable == true) {
-				audioSource.PlayOneShot(fundClickSound);
-			}
-		}
-	}
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (FundManager.totalFund >= fundManager.importedwaterCost && waterManager.currentWater < waterManager.maxWater)
+            if (_button.interactable)
+                AudioManager.Instance.PlaySFX(fundClickSound);
+    }
 }

@@ -5,29 +5,22 @@ using System.Collections;
 
 public class BuyCatchmentPlantSound : MonoBehaviour, IPointerEnterHandler, IPointerDownHandler {
 
-	public AudioSource audioSource;
 	public AudioClip buttonHoverSound;
 	public AudioClip buttonClickSound;
+
+    Button _button;
 
 	public void OnPointerEnter (PointerEventData eventData)
 	{
 		if(FundManager.totalFund >= UpgradeManager.catchmentPrice)
-		{
-			if(this.GetComponent<Button>().interactable == true)
-			{
-				audioSource.PlayOneShot(buttonHoverSound);
-			}
-		}
+			if(_button.interactable == true) 
+				AudioManager.Instance.PlaySFX(buttonHoverSound);
 	}
 	
 	public void OnPointerDown(PointerEventData eventData)
 	{
 		if(FundManager.totalFund >= UpgradeManager.catchmentPrice)
-		{
-			if(this.GetComponent<Button>().interactable == true)
-			{
-				audioSource.PlayOneShot(buttonClickSound);
-			}
-		}
+			if(_button.interactable)
+                AudioManager.Instance.PlaySFX(buttonClickSound);
 	}
 }

@@ -3,51 +3,41 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
 
-public class Tank : MonoBehaviour, IPointerDownHandler, IPointerExitHandler {
+public class Tank : MonoBehaviour, IPointerDownHandler {
+
+	public static bool isRefilling;
 
 	public Reservoir reservoir;
 	public bool isAutoRefill;
 
-	Image modeSwitch;
-
-	AudioSource audioSource;
-
-	public static bool isRefilling;
-
-	void Awake ()
-	{
+	Image _image;
+	
+	void Start ()
+    {
+		reservoir = GetComponentInParent<Reservoir> ();
+		_image = transform.GetChild(0).GetChild(0).GetComponent<Image>();
+		_image.color = Color.gray;
 	}
 	
-	void Start () {
-		reservoir = this.GetComponentInParent<Reservoir> ();
-		modeSwitch = transform.GetChild (0).GetChild (0).GetComponent<Image> ();
-		modeSwitch.color = Color.gray;
-		audioSource = gameObject.AddComponent<AudioSource>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
+	void Update ()
+    {
 		isRefilling = false;
 
-		if (isAutoRefill) {
+		if (isAutoRefill)
 			reservoir.AutoRefill ();
-		}
 	}
 
 	#region IPointerDownHandler implementation
 
-	public void OnPointerDown (PointerEventData eventData)
+	public void OnPointerDown(PointerEventData eventData)
 	{
-		InputManager2.CancelTooltip ();
+		InputManager2.CancelTooltip();
 
-		if (eventData.button == PointerEventData.InputButton.Left) {
-			reservoir.Refill ();
-		}
+		if (eventData.button == PointerEventData.InputButton.Left)
+			reservoir.Refill();
 
-		if(isRefilling) {
-			audioSource.PlayOneShot (InventorySound.refillTankSound);
-		}
+		if(isRefilling)
+			AudioManager.Instance.PlaySFX(AudioDatabase.refillTankSound);
 
 		if (eventData.button == PointerEventData.InputButton.Middle) {
 			isAutoRefill = !isAutoRefill;
@@ -57,21 +47,11 @@ public class Tank : MonoBehaviour, IPointerDownHandler, IPointerExitHandler {
 
 	#endregion
 
-	#region IPointerExitHandler implementation
-
-	public void OnPointerExit (PointerEventData eventData)
-	{
-		
-	}
-
-	#endregion
-
-	void CheckColor (bool value)
+	void CheckColor(bool value)
 	{
 		if (value)
-			modeSwitch.color = Color.green;
-		else {
-			modeSwitch.color = Color.gray;
-		}
+			_image.color = Color.green;
+		else
+			_image.color = Color.gray;
 	}
 }

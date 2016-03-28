@@ -8,25 +8,15 @@ public class UpgradeDesalinationButton : MonoBehaviour, IPointerEnterHandler, IP
 	public GameObject priceTag;
 	public Text priceText;
 
-	public AudioSource audioSource;
-	public AudioClip buttonHoverSound;
-	public AudioClip buttonClickSound;
+    public AudioClip buttonHoverSound;
+    public AudioClip buttonClickSound;
 
-	void Awake  ()
+	void Awake ()
 	{
+		priceText = priceTag.transform.GetChild (0).GetComponent<Text>();
 		priceTag.SetActive (false);
-		priceText = priceTag.transform.GetChild (0).GetComponent <Text> ();
 	}
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
 	#region IPointerEnterHandler implementation
 
@@ -35,14 +25,11 @@ public class UpgradeDesalinationButton : MonoBehaviour, IPointerEnterHandler, IP
 		if (priceText.text != "")
 		{
 			priceTag.SetActive (true);
+
 			if (FundManager.totalFund >= UpgradeManager.desalinationUpgrade1 && UpgradeManager.desalinationUpgradeCount == 1)
-			{
-				audioSource.PlayOneShot(buttonHoverSound);
-			}
+				AudioManager.Instance.PlaySFX(buttonHoverSound);
 			if (FundManager.totalFund >= UpgradeManager.desalinationUpgrade2 && UpgradeManager.desalinationUpgradeCount == 2)
-			{
-				audioSource.PlayOneShot(buttonHoverSound);
-			}
+                AudioManager.Instance.PlaySFX(buttonHoverSound);
 		}
 	}
 
@@ -60,12 +47,8 @@ public class UpgradeDesalinationButton : MonoBehaviour, IPointerEnterHandler, IP
 	public void OnPointerDown(PointerEventData eventData)
 	{
 		if (FundManager.totalFund >= UpgradeManager.desalinationUpgrade1 && UpgradeManager.desalinationUpgradeCount == 1)
-		{
-			audioSource.PlayOneShot(buttonClickSound);
-		}
+            AudioManager.Instance.PlaySFX(buttonClickSound);
 		if (FundManager.totalFund >= UpgradeManager.desalinationUpgrade2 && UpgradeManager.desalinationUpgradeCount == 2)
-		{
-			audioSource.PlayOneShot(buttonClickSound);
-		}
+            AudioManager.Instance.PlaySFX(buttonClickSound);
 	}
 }
