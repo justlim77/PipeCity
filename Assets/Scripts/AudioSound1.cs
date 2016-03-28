@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class AudioSound1 : MonoBehaviour {
@@ -18,7 +19,7 @@ public class AudioSound1 : MonoBehaviour {
 
 	void Update()
 	{
-		if(Application.loadedLevel == 0)
+		if(SceneManager.GetActiveScene().buildIndex == 0)
 		{
 			audioSource.volume += 0.02f;
 			if(audioSource.volume > 0.2f)
@@ -32,7 +33,7 @@ public class AudioSound1 : MonoBehaviour {
 			audioSource.volume -= 0.02f;
 		}
 
-		if(Application.loadedLevel == 2)
+		if(SceneManager.GetActiveScene().buildIndex == 2)
 		{
 			Destroy(this.gameObject);
 		}

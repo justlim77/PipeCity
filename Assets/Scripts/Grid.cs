@@ -26,10 +26,8 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 	public GameObject pipeImage;
 	public Image img_pipe;
 	Image img_tooltip;
-	CanvasGroup tooltipCanvasGroup;
 
 	PipeDatabase pipeDatabase;
-	BuildingDatabase buildingDatabase;
 	WaterManager waterManager;
 	InputManager2 inputManager2;
 
@@ -52,9 +50,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
         _reservoir = GetComponent<Reservoir>();
         img_pipe = pipeImage.GetComponent<Image> ();
 		img_tooltip = GameObject.Find ("Tooltip").GetComponent<Image> ();
-		tooltipCanvasGroup = img_tooltip.GetComponent<CanvasGroup> ();
 		pipeDatabase = GameObject.Find ("PipeDatabase").GetComponent<PipeDatabase> ();
-		buildingDatabase = GameObject.Find ("BuildingDatabase").GetComponent<BuildingDatabase> ();
 
 		waterManager = GameObject.Find ("WaterManager").GetComponent <WaterManager> ();
 		inputManager2 = GameObject.Find ("InputManager").GetComponent <InputManager2> ();
@@ -63,7 +59,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 	void Start ()
 	{
 		bronzeLayout = GameObject.FindGameObjectWithTag ("Bronze").GetComponent<GridLayout> ();
-		gridLayout = this.GetComponentInParent<GridLayout> ();
+		gridLayout = GetComponentInParent<GridLayout> ();
 
 		decay = 1F;
 
@@ -86,9 +82,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 		{
 			// For regular pipe grids
 			if(!isSource && !isBuilding)
-			{
 				AddGrid ();
-			}
 
 			// For water source pipe grids
 			if(isSource)
@@ -182,9 +176,9 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 		{
 			pipe = pipeDatabase.pipes[0];
 			//pipe.hasWater = false;
-			img_pipe.sprite = null;						// Clear pipe sprite'
-			pipeImage.SetActive(false);                // Turn off pipe image child
-            _image.enabled = true;	// Turn on transparent pixel icon
+			img_pipe.sprite = null;			// Clear pipe sprite'
+			pipeImage.SetActive(false);     // Turn off pipe image child
+            _image.enabled = true;	        // Turn on transparent pixel icon
 
 			gridLayout.EvaluateGrid();
 			bronzeLayout.EvaluateGrid();
@@ -216,7 +210,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 				img_pipe.color = Color.white;
 			}
 
-			if (pipe.hasWater && _reservoir.currentCapacity <= 0) {
+			if (pipe.hasWater && _reservoir != null && _reservoir.currentCapacity <= 0) {
 				ToggleWater();
 			}
 		}
@@ -224,15 +218,15 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 		if (isBuilding && isSilver) {
 			if (pipe.hasWater) {
 				_image.color = Color.white;
-				bronzeLayout.GridSlots[this.gridNumber].GetComponent<Grid> ().pipe.hasWater = true;
-				bronzeLayout.GridSlots[this.gridNumber].GetComponent<Image> ().color = Color.white;
+				bronzeLayout.GridSlots[gridNumber].GetComponent<Grid>().pipe.hasWater = true;
+				bronzeLayout.GridSlots[gridNumber].GetComponent<Image>().color = Color.white;
 				//bronzeLayout.EvaluateGrid (); // Updater fix
 
 				//waterOrigin.GetComponent<Reservoir> ().CalculateDrainRate (building.drainRate);
 			} else {
 				_image.color = Color.gray;
-				bronzeLayout.GridSlots[this.gridNumber].GetComponent<Grid> ().pipe.hasWater = false;
-				bronzeLayout.GridSlots[this.gridNumber].GetComponent<Image> ().color = Color.gray;
+				bronzeLayout.GridSlots[gridNumber].GetComponent<Grid>().pipe.hasWater = false;
+				bronzeLayout.GridSlots[gridNumber].GetComponent<Image>().color = Color.gray;
 				//bronzeLayout.EvaluateGrid ();
 			}
 		}
@@ -243,8 +237,8 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 		if (pipe.outletCount > pipe.connectedCount && pipe.hasWater)
 		{
 			pipe.isLeaking = true;
-			if(!AudioManager.Instance.isContinuousPlaying)
-				AudioManager.Instance.PlaySFX(AudioDatabase.splashSound);
+			if (!AudioManager.Instance.isContinuousPlaying)
+				AudioManager.Instance.PlaySFXContinuous(AudioDatabase.splashSound);
 		}
 		else 
 		{ 

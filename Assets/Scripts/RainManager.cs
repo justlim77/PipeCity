@@ -35,9 +35,7 @@ public class RainManager : MonoBehaviour {
 			rain.loop = false;
 			isRaining = true;
 			if(!audioSource.isPlaying)
-			{
 				PlayRainSound();
-			}
 		}
 
 		if (rainDuration > rainInterval) {
@@ -46,7 +44,9 @@ public class RainManager : MonoBehaviour {
 			rainDuration = 0;
 			StopPlayRainSound();
 		}
-	}
+
+        audioSource.mute = InputManager2._isPaused;
+    }
 
 	void PlayRainSound()
 	{

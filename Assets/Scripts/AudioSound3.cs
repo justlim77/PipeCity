@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+#if UNITY_5_3
+using UnityEngine.SceneManagement;
+#endif
 using System.Collections;
 
 public class AudioSound3 : MonoBehaviour {
@@ -17,10 +20,7 @@ public class AudioSound3 : MonoBehaviour {
 	
 	void Update()
 	{
-		if(Application.loadedLevel >= 3)
-		{
+		if(SceneManager.GetActiveScene().buildIndex >= 3)
 			audioSource.volume += 0.02f;
-		}
-
 	}
 }

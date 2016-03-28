@@ -33,8 +33,8 @@ public class CloudController : MonoBehaviour {
 
 	float fl_minX;
 	float fl_maxX;
-	float fl_minY;
-	float fl_maxY;
+	//float fl_minY;
+	//float fl_maxY;
 
     SpriteRenderer _cloudRenderer;
 	
@@ -67,8 +67,8 @@ public class CloudController : MonoBehaviour {
 
 		fl_minX = 0 - fl_horzExtent;
 		fl_maxX = fl_horzExtent;
-		fl_minY = 0 - fl_vertExtent;
-		fl_maxY = fl_vertExtent;
+		//fl_minY = 0 - fl_vertExtent;
+		//fl_maxY = fl_vertExtent;
 	}
 
 	void Move ()

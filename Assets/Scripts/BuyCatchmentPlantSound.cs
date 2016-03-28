@@ -10,6 +10,11 @@ public class BuyCatchmentPlantSound : MonoBehaviour, IPointerEnterHandler, IPoin
 
     Button _button;
 
+    void Start()
+    {
+        _button = GetComponent<Button>();
+    }
+
 	public void OnPointerEnter (PointerEventData eventData)
 	{
 		if(FundManager.totalFund >= UpgradeManager.catchmentPrice)

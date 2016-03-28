@@ -6,31 +6,21 @@ using System.Collections.Generic;
 
 public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler {
 
-	public Pipe selectedPipe;
+	public static Pipe clickedPipe;
+
+    public Pipe selectedPipe;
 	public static bool _isDragging;
 	public GameObject priceImage;
 	public Text priceText;
-
-	Image img_pipe; 
-	Inventory inventory;
 	public int slotNumber;
-
-	public static Pipe clickedPipe;
-
 	public GameObject inputManager;
 	public InputManager2 inputScript;
 
-	public AudioSource audioSource;
-	//public AudioClip buttonHoverSound;
-	//public AudioClip buttonClickSound;
+	Image _pipeImage; 
+	Inventory _inventory;
 
 	void Start ()
 	{
-		audioSource = gameObject.AddComponent<AudioSource>();
-		//buttonHoverSound = Resources.Load ("Audio/Button_MikeKoenig") as AudioClip;
-		//buttonHoverSound = InventorySound.buttonHoverSound;
-		//buttonClickSound = InventorySound.buttonClickSound;
-
 		inputManager = GameObject.Find ("InputManager");
 		inputScript = (InputManager2) inputManager.GetComponent(typeof(InputManager2));
 
@@ -38,11 +28,11 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 		priceText = priceImage.transform.GetChild (0).GetComponent<Text> ();
 		priceImage.SetActive (false);
 
-		inventory = GameObject.FindGameObjectWithTag ("Inventory").GetComponent<Inventory> ();
-		img_pipe = gameObject.transform.GetChild (0).GetComponent<Image> ();
+		_inventory = GameObject.FindGameObjectWithTag ("Inventory").GetComponent<Inventory> ();
+		_pipeImage = gameObject.transform.GetChild (0).GetComponent<Image> ();
 
-		selectedPipe = inventory.Pipes [slotNumber + 1];	// +1 to compensate for [0] default empty pipe
-		img_pipe.sprite = selectedPipe.pipeIcon;
+		selectedPipe = _inventory.Pipes [slotNumber + 1];	// +1 to compensate for [0] default empty pipe
+		_pipeImage.sprite = selectedPipe.pipeIcon;
 	}
 
 	#region IPointerClickHandler implementation
@@ -51,7 +41,6 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 	{
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			audioSource.PlayOneShot(AudioDatabase.buttonClickSound, 0.25f);
 			InputManager2.CancelTooltip ();													// Reset to default state
 
 			inputScript.ResetCursor ();
@@ -61,7 +50,7 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 			inputScript.ResetPipeConnectorFlags ();
 
 			InputManager2.img_tooltip.transform.position = new Vector2 (Input.mousePosition.x, Input.mousePosition.y);
-			InputManager2.img_tooltip.sprite = img_pipe.sprite;								// Set tooltip sprite to selected icon sprite
+			InputManager2.img_tooltip.sprite = _pipeImage.sprite;								// Set tooltip sprite to selected icon sprite
 			InputManager2.img_tooltip.type = Image.Type.Simple;								// Set image type to "Simple"
 			InputManager2.tooltipCanvas.alpha = 1;											// Set image to visible
 			_isDragging = true;																// Set _isDragging to true for InputManager script
@@ -74,8 +63,7 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 
 	public void OnPointerEnter (PointerEventData eventData)
 	{
-		audioSource.PlayOneShot(AudioDatabase.buttonHoverSound, 0.25f);
-		ShowPrice ();
+		TogglePrice(true);
 	}
 
 	#endregion
@@ -84,19 +72,19 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 	
 	public void OnPointerExit (PointerEventData eventData)
 	{
-		HidePrice ();
+		TogglePrice(false);
 	}
 	
 	#endregion
 
-	void ShowPrice ()
+	void TogglePrice(bool value)
 	{
-		priceText.text = "$" + selectedPipe.pipePrice.ToString ();
-		priceImage.SetActive (true);
-	}
-
-	void HidePrice ()
-	{
-		priceImage.SetActive (false);
-	}
+        if (value)
+        {
+		    priceText.text = "$" + selectedPipe.pipePrice.ToString ();
+		    priceImage.SetActive (true);
+        }
+        else
+            priceImage.SetActive(false);
+    }
 }

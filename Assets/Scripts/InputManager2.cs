@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -58,8 +59,8 @@ public class InputManager2 : MonoBehaviour {
 	GameObject go_hotbar;
 	int inventoryOrder;
 	int hotbarOrder;
-	int bronzeOrder;
-	int silverOrder;
+	int _bronzeOrder;
+	int _silverOrder;
 	int tooltipOrder;
 	int pausepanelOrder;
 	int yearOrder;
@@ -136,8 +137,9 @@ public class InputManager2 : MonoBehaviour {
 		mousedOverGrid = null;
 		isRecycle = false;
 		isFix = false;
-		recycleCursor = Resources.Load<Texture2D>("GUI/TracyMouseCursor1");
-		fixCursor = Resources.Load<Texture2D>("GUI/TracyFixCursor");
+
+		recycleCursor = Resources.Load<Texture2D>("sprites/ui/cursors/recycle");
+		fixCursor = Resources.Load<Texture2D>("sprites/ui/cursors/wrench");
 	}
 
 	void Start ()
@@ -193,10 +195,10 @@ public class InputManager2 : MonoBehaviour {
 		tooltipOrder = img_tooltip.rectTransform.GetSiblingIndex ();
 
 		silverGrid.transform.SetSiblingIndex (tooltipOrder - 1);
-		silverOrder = silverGrid.transform.GetSiblingIndex ();
+		_silverOrder = silverGrid.transform.GetSiblingIndex ();
 
-		bronzeGrid.transform.SetSiblingIndex (silverOrder - 1);
-		bronzeOrder = bronzeGrid.transform.GetSiblingIndex ();
+		bronzeGrid.transform.SetSiblingIndex (_silverOrder - 1);
+		_bronzeOrder = bronzeGrid.transform.GetSiblingIndex ();
 
 		_isPaused = false;
 	}
@@ -234,7 +236,7 @@ public class InputManager2 : MonoBehaviour {
 	{
 		if(isReload)
 		{
-			Application.LoadLevel (Application.loadedLevel);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 			PauseToggle (_isPaused);
 		}
 	}
@@ -255,7 +257,7 @@ public class InputManager2 : MonoBehaviour {
 		float fadeTime = fader.BeginFade(1);
 		reduceVolume = true;
 		yield return new WaitForSeconds(fadeTime);
-		Application.LoadLevel(0);
+        SceneManager.LoadScene(0);
 	}
 
 	void TimeControl ()
@@ -451,8 +453,8 @@ public class InputManager2 : MonoBehaviour {
 
 	void TabControl ()
 	{
-		int _bronzeOrder = bronzeGrid.transform.GetSiblingIndex ();
-		int _silverOrder = silverGrid.transform.GetSiblingIndex ();
+		_bronzeOrder = bronzeGrid.transform.GetSiblingIndex ();
+		_silverOrder = silverGrid.transform.GetSiblingIndex ();
 
 		if (Input.GetKeyDown (tabKey) && !_isPaused)
 		{

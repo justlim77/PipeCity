@@ -96,10 +96,7 @@ public class FundManager : MonoBehaviour {
 	{
 		if (totalFund >= importedwaterCost && waterManager.currentWater < waterManager.maxWater) {
 			totalFund -= importedwaterCost;
-			waterManager.AddImportedWater (importedwaterCost);
-
-		} else {
-			Debug.Log ("Insufficient Funds");
+			waterManager.AddImportedWater(importedwaterCost);
 		}
 	}
 }

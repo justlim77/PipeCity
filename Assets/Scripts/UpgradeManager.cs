@@ -43,10 +43,6 @@ public class UpgradeManager : MonoBehaviour {
 	public static int desalinationUpgradeCount = 0;
 	public float desalinationSupplyRate = 1F;
 
-	WaterManager waterManager;
-	FundManager fundManager;
-	RainManager rainManager;
-
 	GridLayout bronzeLayout;
 	
 	void Awake ()
@@ -59,10 +55,6 @@ public class UpgradeManager : MonoBehaviour {
 
 		desalinationTooltip = GameObject.Find ("DesalinationTooltipPanel").gameObject;
 		desalinationTooltip.SetActive (false);
-
-		fundManager = GameObject.Find ("FundManager").GetComponent <FundManager> ();
-		waterManager = GameObject.Find ("WaterManager").GetComponent <WaterManager> ();
-		rainManager = GameObject.Find ("RainManager").GetComponent <RainManager> ();
 
 		bronzeLayout = GameObject.FindGameObjectWithTag ("Bronze").GetComponent <GridLayout> ();
 	}
@@ -91,14 +83,14 @@ public class UpgradeManager : MonoBehaviour {
 			catchmentLevel1.GetComponent<Image> ().color = lightGreen;
 			catchmentUpgradeCount ++;
 
-			waterManager.ComputeRainOutput (catchmentSupplyRate);
+            WaterManager.ComputeRainOutput (catchmentSupplyRate);
 
 			thisObject.GetComponent<Button> ().interactable = false;
 			thisObject.GetComponent<Image> ().color = Color.gray;
 		}
 	}
 
-	public void CatchmentUpgrade (GameObject thisObject)
+	public void CatchmentUpgrade (GameObject buttonObj)
 	{
 		if (FundManager.totalFund >= catchmentUpgrade1 && catchmentUpgradeCount == 1) {
 			FundManager.totalFund -= catchmentUpgrade1;
@@ -106,7 +98,7 @@ public class UpgradeManager : MonoBehaviour {
 			catchmentLevel2.GetComponent<Image> ().color = lightGreen;
 			catchmentUpgradeCount ++;
 
-			waterManager.ComputeRainOutput (catchmentSupplyRate);
+            WaterManager.ComputeRainOutput (catchmentSupplyRate);
 		}
 
 		else if (FundManager.totalFund >= catchmentUpgrade2 && catchmentUpgradeCount == 2) {
@@ -115,16 +107,16 @@ public class UpgradeManager : MonoBehaviour {
 			catchmentLevel3.GetComponent<Image> ().color = lightGreen;
 			catchmentUpgradeCount ++;
 
-			waterManager.ComputeRainOutput (catchmentSupplyRate);
+            WaterManager.ComputeRainOutput (catchmentSupplyRate);
 
-			thisObject.GetComponent<Button> ().interactable = false;
-			thisObject.GetComponent<Image> ().color = Color.gray;
+			buttonObj.GetComponent<Button> ().interactable = false;
+			buttonObj.GetComponent<Image> ().color = Color.gray;
 		}
 	}
 	#endregion
 
 	#region Reclamation Methods
-	public void BuyReclamation (GameObject thisObject)
+	public void BuyReclamation(GameObject buttonObj)
 	{
 		if (FundManager.totalFund >= reclamationPrice) {
 			FundManager.totalFund -= reclamationPrice;
@@ -133,15 +125,15 @@ public class UpgradeManager : MonoBehaviour {
 			reclamationUpgradeCount ++;
 
 			WaterManager.hasReclamation = true;
-			waterManager.ComputeWasteOutput (reclamationSupplyRate, true);
+            WaterManager.ComputeWasteOutput (reclamationSupplyRate, true);
 			bronzeLayout.EvaluateGrid ();
 
-			thisObject.GetComponent<Button> ().interactable = false;
-			thisObject.GetComponent<Image> ().color = Color.gray;
+			buttonObj.GetComponent<Button> ().interactable = false;
+			buttonObj.GetComponent<Image> ().color = Color.gray;
 		}
 	}
 
-	public void ReclamationUpgrade (GameObject thisObject)
+	public void ReclamationUpgrade (GameObject buttonObj)
 	{
 		if (FundManager.totalFund >= reclamationUpgrade1 && reclamationUpgradeCount == 1) {
 			FundManager.totalFund -= reclamationUpgrade1;
@@ -149,7 +141,7 @@ public class UpgradeManager : MonoBehaviour {
 			reclamationLevel2.GetComponent<Image> ().color = lightGreen;
 			reclamationUpgradeCount ++;
 
-			waterManager.ComputeWasteOutput (reclamationSupplyRate, true);
+            WaterManager.ComputeWasteOutput (reclamationSupplyRate, true);
 			bronzeLayout.EvaluateGrid ();
 		}
 		
@@ -159,17 +151,17 @@ public class UpgradeManager : MonoBehaviour {
 			reclamationLevel3.GetComponent<Image> ().color = lightGreen;
 			reclamationUpgradeCount ++;
 
-			waterManager.ComputeWasteOutput (reclamationSupplyRate, true);
+            WaterManager.ComputeWasteOutput (reclamationSupplyRate, true);
 			bronzeLayout.EvaluateGrid ();
 
-			thisObject.GetComponent<Button> ().interactable = false;
-			thisObject.GetComponent<Image> ().color = Color.gray;
+			buttonObj.GetComponent<Button> ().interactable = false;
+			buttonObj.GetComponent<Image> ().color = Color.gray;
 		}
 	}
 	#endregion
 
 	#region Desalination Methods
-	public void BuyDesalination (GameObject thisObject)
+	public void BuyDesalination (GameObject buttonObj)
 	{
 		if (FundManager.totalFund >= desalinationPrice) {
 			FundManager.totalFund -= desalinationPrice;
@@ -177,14 +169,14 @@ public class UpgradeManager : MonoBehaviour {
 			desalinationLevel1.GetComponent<Image> ().color = lightGreen;
 			desalinationUpgradeCount ++;
 
-			waterManager.ComputeSeaOutput (desalinationSupplyRate);
+            WaterManager.ComputeSeaOutput (desalinationSupplyRate);
 
-			thisObject.GetComponent<Button> ().interactable = false;
-			thisObject.GetComponent<Image> ().color = Color.gray;
+			buttonObj.GetComponent<Button> ().interactable = false;
+			buttonObj.GetComponent<Image> ().color = Color.gray;
 		}
 	}
 
-	public void DesalinationUpgrade (GameObject thisObject)
+	public void DesalinationUpgrade (GameObject buttonObj)
 	{
 		if (FundManager.totalFund >= desalinationUpgrade1 && desalinationUpgradeCount == 1) {
 			FundManager.totalFund -= desalinationUpgrade1;
@@ -192,7 +184,7 @@ public class UpgradeManager : MonoBehaviour {
 			desalinationLevel2.GetComponent<Image> ().color = lightGreen;
 			desalinationUpgradeCount ++;
 
-			waterManager.ComputeSeaOutput (desalinationSupplyRate);
+            WaterManager.ComputeSeaOutput (desalinationSupplyRate);
 		}
 		
 		else if (FundManager.totalFund >= desalinationUpgrade2 && desalinationUpgradeCount == 2) {
@@ -201,11 +193,16 @@ public class UpgradeManager : MonoBehaviour {
 			desalinationLevel3.GetComponent<Image> ().color = lightGreen;
 			desalinationUpgradeCount ++;
 
-			waterManager.ComputeSeaOutput (desalinationSupplyRate);
+            WaterManager.ComputeSeaOutput (desalinationSupplyRate);
 
-			thisObject.GetComponent<Button> ().interactable = false;
-			thisObject.GetComponent<Image> ().color = Color.gray;
+			buttonObj.GetComponent<Button> ().interactable = false;
+			buttonObj.GetComponent<Image> ().color = Color.gray;
 		}
 	}
-	#endregion
+    #endregion
+
+    public static bool AllUpgradesPurchased()
+    {
+        return catchmentUpgradeCount >= 3 && reclamationUpgradeCount >= 3 && desalinationUpgradeCount >= 3;
+    }
 }

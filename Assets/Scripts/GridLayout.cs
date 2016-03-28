@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 public class GridLayout : MonoBehaviour {
 	
-	public List<GameObject> GridSlots = new List<GameObject> ();	// List of grids
-	public List<GameObject> WaterSources = new List<GameObject> ();	// List of designated water sources
-	public List<GameObject> BuildingWaterSources = new List<GameObject> ();	// List of building water sources
-	public List<GameObject> DrainSources = new List<GameObject> ();	// List of designated drainage sources
+	public List<GameObject> GridSlots = new List<GameObject>();	            // List of grids
+	public List<GameObject> WaterSources = new List<GameObject>();	        // List of designated water sources
+	public List<GameObject> BuildingWaterSources = new List<GameObject>();	// List of building water sources
+	public List<GameObject> DrainSources = new List<GameObject>();	        // List of designated drainage sources
 
 	public Sprite rock;
 
@@ -30,8 +30,6 @@ public class GridLayout : MonoBehaviour {
 	
 	public static bool isEvaluating;
 
-	[SerializeField] PipeDatabase pipeDatabase;
-	[SerializeField] BuildingDatabase buildingDatabase;
 	[SerializeField] FundManager fundManager;
 	[SerializeField] WaterManager waterManager;
 
@@ -40,12 +38,10 @@ public class GridLayout : MonoBehaviour {
 
 	void Start ()
 	{
-		WaterSources = new List<GameObject> ();
+		WaterSources = new List<GameObject>();
 
-		rock = Resources.Load<Sprite>("Sprites/Obstacles/rock");
+		rock = Resources.Load<Sprite>("sprites/obstacles/rock");
 
-		pipeDatabase = GameObject.Find ("PipeDatabase").GetComponent<PipeDatabase> ();
-		buildingDatabase = GameObject.Find ("BuildingDatabase").GetComponent<BuildingDatabase> ();
 		fundManager = GameObject.Find ("FundManager").GetComponent<FundManager> ();
 		waterManager = GameObject.Find ("WaterManager").GetComponent<WaterManager> ();
 
@@ -61,26 +57,26 @@ public class GridLayout : MonoBehaviour {
 		gridWidth = columns * fl_slotSize;
 		gridHeight = rows * fl_slotSize;
 
-		gridRect = GetComponent<RectTransform> ();
-		gridRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, gridWidth);
-		gridRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, gridHeight);
+		gridRect = GetComponent<RectTransform>();
+		gridRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, gridWidth);
+		gridRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, gridHeight);
 
 		for (int y = 0; y < rows; y++)
-		{
+        {
 			for (int x = 0; x < columns; x++)
 			{
-				GameObject gridSlot = (GameObject) Instantiate (slotPrefab);
-				RectTransform slotRect = gridSlot.GetComponent<RectTransform> ();
+				GameObject gridSlot = Instantiate(slotPrefab);
+				RectTransform slotRect = gridSlot.GetComponent<RectTransform>();
 
 				gridSlot.name = "Grid " + (y+1) + "." + (x+1);
-				gridSlot.GetComponent<Grid> ().gridNumber = GridNumber;
+				gridSlot.GetComponent<Grid>().gridNumber = GridNumber;
 				GridNumber++;
-				gridSlot.transform.SetParent (this.transform);
-				GridSlots.Add (gridSlot);
+				gridSlot.transform.SetParent(transform);
+				GridSlots.Add(gridSlot);
 
-				slotRect.localPosition = new Vector2 ((-gridWidth/2) + (fl_slotSize * x), -(fl_slotSize * y));
-				slotRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, fl_slotSize);
-				slotRect.SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, fl_slotSize);
+				slotRect.localPosition = new Vector2((-gridWidth/2) + (fl_slotSize * x), -(fl_slotSize * y));
+				slotRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, fl_slotSize);
+				slotRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, fl_slotSize);
 			}
 		}
 
@@ -139,7 +135,7 @@ public class GridLayout : MonoBehaviour {
 			GridSlots[b].GetComponent<Grid> ().pipe.pipeHasBottom = true;
 			GridSlots[b].GetComponent<Grid> ().pipe.outletCount = 1;
 			BuildingOrder (GridSlots[b], gridOrder); gridOrder++;
-			GridSlots[b].GetComponent<Image> ().sprite = Resources.Load<Sprite> ("Sprites/Buildings/" + GridSlots[b].GetComponent<Grid> ().building.buildingName);
+			GridSlots[b].GetComponent<Image> ().sprite = Resources.Load<Sprite> ("sprites/buildings/" + GridSlots[b].GetComponent<Grid> ().building.buildingName);
 			//GridSlots[a].GetComponent<Image> ().color = Color.gray;
 			GridSlots[b].transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, 96);
 			GridSlots[b].transform.GetComponent<RectTransform>().anchoredPosition = new Vector2 (fl_slotSize * b, 64);
@@ -167,12 +163,12 @@ public class GridLayout : MonoBehaviour {
 		WaterSources.Add (GridSlots[columns * (rows) - spacing + 1]);	// Bottom 4th tap
 
 		// For each water source in group, turn hasWater to true and set as isSource, also add Reservoir script
-		foreach (GameObject waterSource in WaterSources) {
+		foreach (var waterSource in WaterSources) {
 			Grid gridComponent = waterSource.GetComponent<Grid> ();
 			RectTransform imageRect = waterSource.transform.GetChild(0).GetComponent<RectTransform> ();
 			gridComponent.isSource = true;
 			//waterSource.GetComponent<Button>().interactable = false;
-			waterSource.AddComponent <Reservoir> ();
+			waterSource.AddComponent<Reservoir>();
 
 			gridComponent.waterOrigin = waterSource;
 
@@ -185,18 +181,18 @@ public class GridLayout : MonoBehaviour {
 			                                        true, false, true, false, 2, 1, false, false, 100F);
 
 			// Assign tank prefab
-			GameObject waterTank = Instantiate (tankPrefab);
-			waterTank.transform.SetParent (waterSource.GetComponent<RectTransform> ());
-			waterTank.transform.SetAsFirstSibling ();
+			GameObject waterTank = Instantiate(tankPrefab);
+			waterTank.transform.SetParent (waterSource.GetComponent<RectTransform>());
+			waterTank.transform.SetAsFirstSibling();
 			//waterTank.GetComponent<RectTransform>().SetSizeWithCurrentAnchors (RectTransform.Axis.Horizontal, 30);
-			waterTank.GetComponent<RectTransform>().anchoredPosition = new Vector2 (0, -fl_slotSize);
+			waterTank.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -fl_slotSize);
 
 			// Activate child image and assign corresponding pipe icon
-			gridComponent.pipeImage.SetActive (true);
+			gridComponent.pipeImage.SetActive(true);
 			gridComponent.img_pipe.sprite = gridComponent.pipe.pipeIcon;
 
 			// Flip source pipe 90degrees facing up to match top/bottom "I" orientation
-			imageRect.rotation = Quaternion.Euler (0, 0, 90);
+			imageRect.rotation = Quaternion.Euler(0, 0, 90);
 
 			gridComponent.EvaluatePipeState ();
 		}
@@ -210,14 +206,14 @@ public class GridLayout : MonoBehaviour {
 		DrainSources.Add (GridSlots[199]);	// Bottom 4th tap
 		
 		// For each water source in group, turn hasWater to true and set as isSource, also add Reservoir script
-		foreach (GameObject drainSource in DrainSources) {
+		foreach (var drainSource in DrainSources) {
 			Grid gridComponent = drainSource.GetComponent<Grid> ();
-			RectTransform imageRect = drainSource.transform.GetChild(0).GetComponent<RectTransform> ();
+			//RectTransform imageRect = drainSource.transform.GetChild(0).GetComponent<RectTransform> ();
 			
 			// Disable "transparent pixel" image & disable interactivity
-			drainSource.GetComponent<Image> ().enabled = false;
-			drainSource.GetComponent<Button> ().interactable = false;
-			drainSource.AddComponent <Drain> ();
+			drainSource.GetComponent<Image>().enabled = false;
+			drainSource.GetComponent<Button>().interactable = false;
+			drainSource.AddComponent<Drain>();
 			
 			// Assign a new I pipe with top/bottom orientation
 			gridComponent.pipe = new Pipe ("bronze_I_pipe", 1, 20, 1,
@@ -235,16 +231,16 @@ public class GridLayout : MonoBehaviour {
 
 	void SetObstacles ()
 	{
-		foreach (GameObject grid in GridSlots) {
+		foreach (var grid in GridSlots) {
 			Grid gridComponent = grid.GetComponent<Grid> ();
 
 			if (grid == GridSlots[27] || grid == GridSlots[35] || grid == GridSlots[47] ||
 			    grid == GridSlots[68] || grid == GridSlots[115] || grid == GridSlots[134] ||
 			    grid == GridSlots[170] || grid == GridSlots[188] || grid == GridSlots[206]) {
 				gridComponent.pipeImage.SetActive (true);
-				gridComponent.GetComponent<Button> ().interactable = false;
+				gridComponent.GetComponent<Button>().interactable = false;
 				gridComponent.isObstacle = true;
-				gridComponent.pipeImage.GetComponent<Image> ().sprite = rock;
+				gridComponent.pipeImage.GetComponent<Image>().sprite = rock;
 			}
 		}
 	}
@@ -271,37 +267,35 @@ public class GridLayout : MonoBehaviour {
 
 	void ResetGrid ()
 	{	
-		fundManager.ResetIncreaseRate ();
+		fundManager.ResetIncreaseRate();
 
 		// Loop through all grid slots and set hasWater to false
-		foreach (GameObject gridSlot in GridSlots)
+		foreach (var gridSlot in GridSlots)
 		{
-			if(gridSlot.GetComponent<Grid>().isSource) {
-				gridSlot.GetComponent<Grid> ().pipe.connectedCount = 1;
-			}
+            Grid grid = gridSlot.GetComponent<Grid>();
 
-			if(!gridSlot.GetComponent<Grid> ().isSource) {
-				gridSlot.transform.GetChild (1).transform.rotation = Quaternion.Euler (0, 0, 0);
-				gridSlot.transform.GetChild (1).gameObject.SetActive (false);
-				gridSlot.GetComponent<Grid> ().pipe.hasWater = false;
-				gridSlot.GetComponent<Grid> ().waterOrigin = null;
-				gridSlot.GetComponent<Grid> ().pipe.connectedCount = 0;
-
+            if (grid.isSource)
+                grid.pipe.connectedCount = 1;        
+			else
+            {
+				gridSlot.transform.GetChild(1).transform.rotation = Quaternion.Euler (0, 0, 0);
+				gridSlot.transform.GetChild(1).gameObject.SetActive(false);
+                grid.pipe.hasWater = false;
+                grid.waterOrigin = null;
+                grid.pipe.connectedCount = 0;
 			}
 			
-			if(gridSlot.GetComponent<Grid> ().isBuilding) {
-				if (gridSlot.GetComponent<Grid> ().waterOrigin != null) {
-					gridSlot.GetComponent<Grid> ().waterOrigin.GetComponent<Reservoir> ().connectedBuildings.Clear ();
-				}
-			}
+			if(grid.isBuilding)
+				if (grid.waterOrigin != null)
+					grid.waterOrigin.GetComponent<Reservoir>().connectedBuildings.Clear();
 		}
 
 		// Loop through all designated water sources and set hasWater to true
-		foreach (GameObject waterSource in WaterSources)
+		foreach (var waterSource in WaterSources)
 		{
-			waterSource.GetComponent<Grid> ().waterOrigin = waterSource;
-			waterSource.GetComponent<Reservoir> ().connectedBuildings.Clear ();
-			waterSource.GetComponent<Reservoir> ().ResetDrainRate ();
+			waterSource.GetComponent<Grid>().waterOrigin = waterSource;
+			waterSource.GetComponent<Reservoir>().connectedBuildings.Clear();
+			waterSource.GetComponent<Reservoir>().ResetDrainRate();
 		}
 	}
 
@@ -310,37 +304,42 @@ public class GridLayout : MonoBehaviour {
 		waterManager.ResetDrainOutput ();
 
 		// Loop through all grid slots and set hasWater to false
-		foreach (GameObject bronzegridSlot in GridSlots)
+		foreach (var bronzegridSlot in GridSlots)
 		{
-			if(bronzegridSlot.GetComponent<Grid>().isSource) {
-				bronzegridSlot.GetComponent<Grid> ().pipe.hasWater = 
-					silverLayout.GridSlots [bronzegridSlot.GetComponent<Grid> ().gridNumber].GetComponent <Grid> ().pipe.hasWater;
-				bronzegridSlot.GetComponent<Grid> ().pipe.connectedCount = 0;
-				bronzegridSlot.GetComponent<Grid> ().waterOrigin = bronzegridSlot;
+            Grid bronzeGrid = bronzegridSlot.GetComponent<Grid>();
+
+            if (bronzeGrid.isSource) {
+                bronzeGrid.pipe.hasWater = 
+					silverLayout.GridSlots[bronzeGrid.gridNumber].GetComponent<Grid>().pipe.hasWater;
+                bronzeGrid.pipe.connectedCount = 0;
+                bronzeGrid.waterOrigin = bronzegridSlot;
 			}
 			
-			if(!bronzegridSlot.GetComponent<Grid> ().isSource) {
-				bronzegridSlot.transform.GetChild (1).transform.rotation = Quaternion.Euler (0, 0, 0);	// Splash
-				bronzegridSlot.transform.GetChild (1).gameObject.SetActive (false);
-				bronzegridSlot.GetComponent<Grid> ().pipe.hasWater = false;
-				bronzegridSlot.GetComponent<Grid> ().waterOrigin = null;
-				bronzegridSlot.GetComponent<Grid> ().pipe.connectedCount = 0;
-				bronzegridSlot.GetComponent<Grid> ().sewageBuildingSources.Clear ();
+			else
+            {
+				bronzegridSlot.transform.GetChild(1).transform.rotation = Quaternion.Euler (0, 0, 0);	// Splash
+				bronzegridSlot.transform.GetChild(1).gameObject.SetActive (false);
+                bronzeGrid.pipe.hasWater = false;
+                bronzeGrid.waterOrigin = null;
+                bronzeGrid.pipe.connectedCount = 0;
+                bronzeGrid.sewageBuildingSources.Clear ();
 			}
 		}
 		
 		// Loop through all designated water sources and set hasWater to true
-		foreach (GameObject drainSource in DrainSources)
+		foreach (var drainSource in DrainSources)
 		{
-			drainSource.GetComponent<Grid> ().waterOrigin = null;
-			drainSource.GetComponent<Grid> ().pipe.hasWater = false;
-			drainSource.GetComponent<Drain> ().connectedBuildings.Clear ();
-			//drainSource.GetComponent<Drain> ().ComputeDrainOutput ();
-			if (!drainSource.GetComponent<Grid> ().pipe.hasWater) {
-				waterManager.ResetDrainOutput ();
-			}
+            Grid grid = drainSource.GetComponent<Grid>();
+            Drain drain = drainSource.GetComponent<Drain>();
 
-			drainSource.GetComponent<Drain> ().ComputeDrainOutput ();
+            grid.waterOrigin = null;
+            grid.pipe.hasWater = false;
+            drain.connectedBuildings.Clear ();
+			//drainSource.GetComponent<Drain> ().ComputeDrainOutput ();
+			if (!grid.pipe.hasWater)
+				waterManager.ResetDrainOutput ();
+
+			drain.ComputeDrainOutput ();
 		}
 	}
 
@@ -349,23 +348,21 @@ public class GridLayout : MonoBehaviour {
 	// Takes in column count and divides into 4 equidistant grid spaces
 	int Equidistance (int e)
 	{
-		int equidistance = (int)(columns / 5);
-
+		int equidistance = columns / 5;
 		return equidistance;
 	}
+
 	// Takes in a grid index and returns the corresponding row left limit
 	int RightLimit (int rNumber)
 	{
 		int negativeNumber = rNumber;
 
 		do
-		{
 			negativeNumber = negativeNumber - columns;
-		} while (negativeNumber > -1);
+        while (negativeNumber > -1);
 
 		int rightLimit = (Mathf.Abs (negativeNumber)) + rNumber - 1;
 
-		//Debug.Log ("Right limit : " + rightLimit);
 		return rightLimit;
 	}
 
@@ -374,28 +371,24 @@ public class GridLayout : MonoBehaviour {
 	{
 		int newColumn = columns;
 
-		while (newColumn < lNumber) {
+		while (newColumn < lNumber)
 			newColumn = newColumn + columns;
-		}
 
 		int leftLimit;
 
-		if (newColumn == lNumber) {
+		if (newColumn == lNumber)
 			leftLimit = newColumn;
-		} 
-		else {
+		else
 			leftLimit = newColumn - columns;
-		}
 
-		//Debug.Log ("Lef limit : " + leftLimit);
 		return leftLimit;
 	}
 
 	private void CalculateScale ()
 	{
 		Camera cam = Camera.main;
-		float fl_camHeight = 2.0f * cam.orthographicSize;
-		float fl_camWidth = fl_camHeight * cam.aspect;
+		//float fl_camHeight = 2.0f * cam.orthographicSize;
+		//float fl_camWidth = fl_camHeight * cam.aspect;
 		float fl_scale = cam.aspect / fl_targetAspect;
 		Debug.Log (fl_scale);
 		
@@ -405,21 +398,21 @@ public class GridLayout : MonoBehaviour {
 
 	void CheckSourceNeighbors ()	// Silver [OK]
 	{
-		foreach (GameObject waterSource in WaterSources) {
+		foreach (var waterSource in WaterSources) {
 			CheckAdjacent (waterSource);
 		}
 	}
 	
 	void CheckBronzeSourceNeighbors ()		// Bronze
 	{
-		foreach (GameObject buildingSource in BuildingWaterSources) {
+		foreach (var buildingSource in BuildingWaterSources)
 			CheckBronzeAdjacent (buildingSource);
-		}
 	}
 	
 	void CheckTileNeighbors ()	// Silver [OK]
 	{
-		while (pipesWithWaterToProcess.Count > 0) {
+		while (pipesWithWaterToProcess.Count > 0)
+        {
 			GameObject currentPipe = (GameObject) pipesWithWaterToProcess.Dequeue ();
 			CheckAdjacent (currentPipe);
 		}
@@ -427,7 +420,8 @@ public class GridLayout : MonoBehaviour {
 
 	void CheckBronzeTileNeighbors ()	// Bronze
 	{
-		while (bronzepipesWithWaterToProcess.Count > 0) {
+		while (bronzepipesWithWaterToProcess.Count > 0)
+        {
 			GameObject currentPipe = (GameObject) bronzepipesWithWaterToProcess.Dequeue ();
 			CheckBronzeAdjacent (currentPipe);
 		}
@@ -437,9 +431,6 @@ public class GridLayout : MonoBehaviour {
 	void CheckAdjacent (GameObject tile)
 	{
 		Grid _grid = tile.GetComponent<Grid>();
-		
-		//Debug.Log ((LeftLimit (_grid.gridNumber)));
-		//Debug.Log ((RightLimit (_grid.gridNumber)));
 		
 		// Check right [OK]
 		if (_grid.gridNumber > LeftLimit (_grid.gridNumber) - 1 && _grid.gridNumber < RightLimit (_grid.gridNumber)) {
@@ -613,9 +604,6 @@ public class GridLayout : MonoBehaviour {
 	{
 		Grid _Bgrid = tile.GetComponent<Grid>();
 		
-		//Debug.Log ((LeftLimit (_grid.gridNumber)));
-		//Debug.Log ((RightLimit (_grid.gridNumber)));
-		
 		// Check right [OK]
 		if (_Bgrid.gridNumber > LeftLimit (_Bgrid.gridNumber) - 1 && _Bgrid.gridNumber < RightLimit (_Bgrid.gridNumber)) {
 			//If this pipe has right outlet and next pipe has left outlet
@@ -753,13 +741,15 @@ public class GridLayout : MonoBehaviour {
 
 	void CheckBuildingSource ()	// Silver [OK]
 	{
-		foreach (GameObject grid in GridSlots) {
+		foreach (var grid in GridSlots)
+        {
 			Grid gridComponent = grid.GetComponent<Grid> ();
-
-			if(gridComponent.isBuilding) {
-				if (gridComponent.pipe.hasWater) {
-					gridComponent.waterOrigin.GetComponent<Reservoir> ().connectedBuildings.Add (grid);
-					gridComponent.waterOrigin.GetComponent<Reservoir> ().CalculateDrainRate (gridComponent.building.drainRate);
+			if(gridComponent.isBuilding)
+            {
+				if (gridComponent.pipe.hasWater)
+                {
+					gridComponent.waterOrigin.GetComponent<Reservoir>().connectedBuildings.Add (grid);
+					gridComponent.waterOrigin.GetComponent<Reservoir>().CalculateDrainRate (gridComponent.building.drainRate);
 					fundManager.CalculateCloudFund (gridComponent.building.payOut);
 				}
 			}
@@ -787,27 +777,28 @@ public class GridLayout : MonoBehaviour {
 		}
 		*/
 
-		foreach (GameObject building in BuildingWaterSources) {
-			Grid gridComponent = building.GetComponent<Grid> ();
-			if (building.GetComponent<Grid> ().pipe.hasWater
-			    && !building.GetComponent<Grid> ().pipe.isLeaking) {
+		foreach (GameObject building in BuildingWaterSources)
+        {
+			Grid gridComponent = building.GetComponent<Grid>();
+			if (gridComponent.pipe.hasWater && !gridComponent.pipe.isLeaking)
+            {
 				//gridComponent.GetComponent<Drain> ().connectedBuildings.Add (building);
 				//gridComponent.GetComponent<Drain> ().ComputeDrainOutput ();
-				waterManager.ComputeBuildingOutput ();
-				waterManager.ComputeWasteOutput (0, false);
+				WaterManager.ComputeBuildingOutput ();
+                WaterManager.ComputeWasteOutput (0, false);
 			}
 		}
 	}
 
 	void CheckPipeLeak ()
 	{
-		foreach (GameObject grid in GridSlots) {
+		foreach (var grid in GridSlots)
+        {
 			Grid gridComponent = grid.GetComponent<Grid> ();
-			
-			if(gridComponent.waterOrigin != null && gridComponent.pipe.isLeaking) {
-				gridComponent.waterOrigin.GetComponent<Reservoir> ().CalculateDrainRate (-0.5f *
-				                                                                         (gridComponent.pipe.outletCount - 
-				                                                                         gridComponent.pipe.connectedCount));	
+			if(gridComponent.waterOrigin != null && gridComponent.pipe.isLeaking)
+            {
+				gridComponent.waterOrigin.GetComponent<Reservoir>().CalculateDrainRate
+                (-0.5f * (gridComponent.pipe.outletCount - gridComponent.pipe.connectedCount));	
 			}
 		}
 	}
