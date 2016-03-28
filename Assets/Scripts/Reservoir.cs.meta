@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: fd026114c849db34fbba230056f57c61
+timeCreated: 1426492805
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - watertankPrefab: {fileID: 143284, guid: a98b314b4ced41e42bcd72fab881f442, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,184 @@
+2/22/2015
+	- Added new iteration of Inventory class
+	- Added new iteration of Underground Grid class
+	- Added Pause function (Space key to pause)
+	- Added random scrolling clouds
+	- Inverted background from white-blue to blue-white
+
+2/23/2015
+	- Added game speed controls (Pg Up to increase, pg down to decrease, Home to reset)
+	- Added selection and setting of pipes from inventory to grid (Left-click inventory pipes to select, left-click on grid "+" to set)
+	- Added pipe rotation functionality (Middle-mouse click to rotate pipe counter-clockwise)
+	- Added functionality to remove pipes from grid after placing (Right-click to remove pipe from grid)
+	- Added bronze pipe layer and silver pipe layer switching (Press Tab to switch between layers)
+
+2/24/2015
+	- changed grid layout art assets to colored "+" - silver for silver grid and bronze for bronze grid
+	- Added mouse-over highlighted "+" icons for better visibility
+	- Added functionality to turn off "+" icons that are already filled with pipes to reduce visual clutter
+	- Grid pipes will be removed first before tooltip pipe (**PROBLEM: Cannot remove tooltip pipe while hovering over grid)
+	- Added transparency to underneath grid layer when tab-switching (**Currently set at 50% transparency)
+	- Limited silver pipes to silver grid and bronze pipes to bronze grid  (**PROBLEM: Code not optimized)
+	- Added UI elements for displaying funds and health
+	- Added purchase function to reduce funds based on how much the selected pipe costs
+	- Added health bar system currently in simulation debug mode
+
+2/25/2015
+	- Added props (Bushes,buildings,pumps,lake)
+	- Added main menu with animations, play, and quit functionality
+	- Edited pipe art to include 1px black border for better visibility
+
+3/6/2015
+	- Updated art assets (Sky, skyline, buildings, underground)
+	- Added Hotkey switching function to InputManager script
+	- Updated project folder to Unity 5.0.0f4
+	- Added Quick-buy for pipes (Use Alpha 1 ~ 8 to buy pipes)
+	- Re-arranged hierarchy (All game managers added to "Manager" parent, databases to "Databases", and helper scripts to "Helpers")
+	- Created new GUI art assets
+	- Modified the play space to become 21 x 9 grid at 32x32 px per grid slot
+	- Added randomized transparency for clouds
+
+3/7/2015
+	- Added feature to assign pipe class to grids with connector flag variables (Top, right, bottom, left booleans)
+	- Fixed rotation and connector flag being out of sync
+	- Fixed grid-pipes all sharing the same connector flag booleans
+
+3/8/2015
+	- Added check to determine which pipes have water from a main source
+	- Added check to each pipe on grid for connectedness (top, right, bottom, left) in LateUpdate method
+	- Encountered bug of backflow water checking (Pipes that are disconnected still can get water from chain because of backwards checking)
+	- Main menu art 50% (Jun)
+	- PipeTown_v3_0.zip uploaded
+
+3/9/2015
+	- Added ResetConnection () method and split Evaluation of tiles into Horizontal and Vertical (check tomorrow again)
+	- Repositioned and resized GUI elements (Inventory now at middle-bottom and 50% of original scale)
+	- Reconceptualized game mechanics to ensure variety
+	- Started work on Title Screen and Main Menu (Jun)
+	- Recreated GUI elements for funds, health, level, and inventory background (Tracy)
+
+3/10/2015
+	- Replaced GUI elements for funds, experience, timer, pause menu, and pause menu options
+	- Added functionality for Pause Menu (Resume, Restart, and Quit)
+	- Added city building sprites and populated entire row above grid
+	- Switched health to leveling (experience) system
+	- Reverted pipe logic to breadth forloop
+
+3/11/2015
+	- Added "Help" menu button
+	- Refactored code and implemented new algorith (Breadth-first search using Queues (FIFO))
+	- Implemented new adjacent tile checking logic (Removed dependancy on recursive loops)
+	- Fixed left/right adjacent tile checks not having left and right limits
+
+3/12/2015
+	- Swapped to new GUI textures
+	- Resized and repositioned Inventory GUI
+	- Fixed seeding of starting pipes to create new pipes instead of referencing from database
+	- Implemented first row to be non-interactive for setting buildings
+	- Removed white empty pixels from GUI elements
+	- Implemented all scenes into latest build
+	- Removed "+" icons to reduce visual interference
+	- Replaced "+" icons to transparent texture, hover over with mouse to show grid outline
+	- Replaced Inventory item icons and added highlight toggle when mouse over
+	- Replaced city buildings with housing buildings
+	- Fixed game not properly unpausing when switching scenes
+	- Repositioned several GUI elements in all scenes
+
+3/13/2015
+	- Added Upgrade menu
+	- Changed GUI style
+	- Added pipe leaking checks
+	- Added building hasWater checks
+	- Replaced Level Bar with Water Capacity Bar
+
+3/14/2015
+	- Implemented check to determine which water source is supplying which building
+	- Added check to prevent players from double-feeding water source into another water source (Pipes will be destroyed if attempted)
+	- Disabled unused adjacent tiles on building grid row
+	- Added Building class, BuildingDatabase, and Building class component to each Grid labelled as a building
+	- More tutorial pages were added onto help menu
+	- Added visual cue for help menu to indicate which page the player is currently on
+	- Implemented new method of initializing buildings
+
+3/15/2015
+	- Implemented monthly payouts for earning funds after a certain amount of time
+	- Drain factor for each building connected to source
+	- Number of leaks are now taken into drain factor
+
+3/16/2015
+	- Completed Title Screen artwork and replaced placeholder title screen
+	- Removed Play/Quit button from Title Screen, moved to Main Menu
+	- Revised How to Play pages (Combined and proofread)
+	- Added interactive underground reservoir tanks to show reservoir reserves
+	- Added functionality to click on reservoir tanks to add water from Water Reserves
+	- Correctly implemented drain rate in relation to how many leaks and/or buildings connected
+	- Replaced "Delete pipe" function with "Recycle pipe" function (Press R to toggle)
+	- Changed art for Upgrades button
+	- Added "Buy Water" button that allows player to purchase imported water to generate more water reserves
+	- Added rock obstacles to prevent players from laying pipes onto blocked off grids for increased difficulty
+
+3/17/2015
+	- Added fade screens to all scenes
+	- Added help menu in-game
+	- New title screen and main menu GUI elements added
+	- Added splash and ferris wheel animations to title screens
+	- Added visual feedback for pipe price on mouse hover
+	- Made visual changes to upgrade menu
+	- Added end scene
+	- Revised coding and GUI art for Upgrade menu
+	- Implemented new upgrade purchasing and upgrade system for the national taps
+	- Enlarged bronze pipe art assets to furthur distinguish from silver pipes
+	- Created new GUI element for denoting current day/month/year
+	- Created new GUI elements for recycle and fix pipe functions
+	- Added rain feature for stormwater management/local catchment water
+
+3/18/2015
+	- Implemented rain system and rain collection upgrades
+	- Water output rate is now conditionally affected by the presence of both rain and facilities (+ level of upgrades)
+	- Desalination water output rate is fixed as a "per second" gain
+
+3/19/2015
+	- Added sfx and looping bgm with fade to all scenes
+	- Added sewage drainage output into total water output capacity
+	- Fixed synchronization issues with output calculations for sewage grid
+	- Rearranged payout timer to underneath fund and added year counter
+	- Refactored wastewater output rate algorithm
+	- Added refunding and sfx for recycling pipes
+	- Added pipe degradation when water flows through
+	- Added repair/fix feature that costs a set amount to repair pipes that are less than 80% integrity
+	- Increased starting fund
+	- Decreased upgrades costs
+	- Increased payout rate per building supplied with water
+	- Replaced rock texture with new rock texture
+	- Added 50% reservoir auto-refill toggle feature (Toggle by middle-mouse button while hovering over water tank)
+
+3/20/2015
+	- Reverted payout system to per second
+	- Added year calander timer
+	- Added pipe health color changing to show state of pipe
+	- Fixed player being able to constantly recycle pipes that aren't supposed to be recycled/fixed
+	- Updated pipe degradation intervals and amount
+	- Updated help menu pages to reflect current features
+	- Added win/lose scenes and checks
+	- Added left/right arrow functionality for navigation of help menu
+	- Added method for navigating from end screens to title screen by clicking on logo
+	- Fixed sudden color shift when pipes are going through state changes
+
+// TO-DO //
+
+	Set sewage pipes different from supply
+	Recycle to refund 1/4 or 1/2 of purchase price of pipes
+	Tutorial mode?
+	Upgrade menu
+
+	Tracy
+	- Fader screens/logic
+	- Sounds actions/events/BGM
+	
+	Jun
+	- Loading screen art/icons
+
+	Broken pipe
+	Pipe thief
+	Upgrades logic/art
+	Win/Lose condition/logic
