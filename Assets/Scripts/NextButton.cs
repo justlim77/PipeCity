@@ -231,7 +231,7 @@ public class NextButton : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
 		{
 			if(this.GetComponent<Button>().interactable == true)
 			{
-				audioSource.PlayOneShot(buttonClickSound);
+				AudioManager.Instance.PlaySFX(buttonClickSound);
 			}
 			helpPage += 1;
 			if(helpPage > 13)
@@ -245,7 +245,7 @@ public class NextButton : MonoBehaviour, IPointerDownHandler, IPointerEnterHandl
 	{
 		if(this.GetComponent<Button>().interactable == true)
 		{
-			audioSource.PlayOneShot(buttonHoverSound);
+            AudioManager.Instance.PlaySFX(buttonHoverSound);
 		}
 	}
 

@@ -3,12 +3,20 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
+public enum GridType
+{
+    Bronze,
+    Silver
+}
+
 public class GridLayout : MonoBehaviour {
 	
 	public List<GameObject> GridSlots = new List<GameObject>();	            // List of grids
 	public List<GameObject> WaterSources = new List<GameObject>();	        // List of designated water sources
 	public List<GameObject> BuildingWaterSources = new List<GameObject>();	// List of building water sources
 	public List<GameObject> DrainSources = new List<GameObject>();	        // List of designated drainage sources
+
+    public GridType gridType;
 
 	public Sprite rock;
 
@@ -45,8 +53,8 @@ public class GridLayout : MonoBehaviour {
 		fundManager = GameObject.Find ("FundManager").GetComponent<FundManager> ();
 		waterManager = GameObject.Find ("WaterManager").GetComponent<WaterManager> ();
 
-		silverLayout = GameObject.FindWithTag ("Silver").GetComponent<GridLayout> ();
-		bronzeLayout = GameObject.FindWithTag ("Bronze").GetComponent<GridLayout> ();
+		//silverLayout = GameObject.FindWithTag ("Silver").GetComponent<GridLayout> ();
+		//bronzeLayout = GameObject.FindWithTag ("Bronze").GetComponent<GridLayout> ();
 
 		//CalculateScale ();
 		DrawGrid ();
@@ -82,10 +90,10 @@ public class GridLayout : MonoBehaviour {
 
 		SetBuildings ();
 
-		if (transform.tag == "Silver") {
+		if (gridType.Equals(GridType.Silver)) {
 			SetSupplySources ();
 		}
-		if (transform.tag == "Bronze") {
+		if (gridType.Equals(GridType.Bronze)) {
 			SetDrainageSources ();
 		}
 
@@ -139,7 +147,7 @@ public class GridLayout : MonoBehaviour {
 			//GridSlots[a].GetComponent<Image> ().color = Color.gray;
 			GridSlots[b].transform.GetComponent<RectTransform>().SetSizeWithCurrentAnchors (RectTransform.Axis.Vertical, 96);
 			GridSlots[b].transform.GetComponent<RectTransform>().anchoredPosition = new Vector2 (fl_slotSize * b, 64);
-			if (transform.tag == "Bronze") {
+			if (gridType == GridType.Bronze) {
 				BuildingWaterSources.Add (GridSlots[b]);
 				GridSlots[b].GetComponent<Grid> ().isSource = true;
 				GridSlots[b].GetComponent<Grid> ().waterOrigin = GridSlots[b];
@@ -247,7 +255,7 @@ public class GridLayout : MonoBehaviour {
 
 	public void EvaluateGrid ()
 	{
-		if (transform.tag == "Silver") {
+		if (gridType.Equals(GridType.Silver)) {
 			ResetGrid ();				// Remove water from all pipes
 			CheckSourceNeighbors ();	// Check adjacent source neighbors for connectivity
 			CheckTileNeighbors ();		// Check adjacent tile neighbors for connectivity
@@ -257,7 +265,7 @@ public class GridLayout : MonoBehaviour {
 			bronzeLayout.EvaluateGrid ();
 		}
 
-		if (transform.tag == "Bronze") {
+		if (gridType.Equals(GridType.Bronze)) {
 			ResetBronzeGrid ();
 			CheckBronzeSourceNeighbors ();
 			CheckBronzeTileNeighbors ();

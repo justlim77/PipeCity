@@ -55,7 +55,7 @@ public class InputManager2 : MonoBehaviour {
 	GameObject go_fund;
 	GameObject go_timer;
 	GameObject go_water;
-	GameObject go_inventory;
+    public GameObject go_inventory;
 	GameObject go_hotbar;
 	int inventoryOrder;
 	int hotbarOrder;
@@ -116,22 +116,25 @@ public class InputManager2 : MonoBehaviour {
 		go_fund = GameObject.Find ("Fund");
 		go_timer = GameObject.Find ("Timer");
 		go_water = GameObject.Find ("Water");
-		go_inventory = GameObject.FindGameObjectWithTag("Inventory");
+        //go_inventory = GameManager.Instance.inventory.gameObject;
 		go_hotbar = GameObject.Find ("Hotbar");
 
 		pauseMenu = GameObject.Find ("PauseMenu");															// Return gameobject PausePanel by name
 		pauseMenuCanvas = pauseMenu.GetComponent<CanvasGroup>();											// Return canvas group component
 		interactivePanelCanvas = pauseMenu.transform.GetChild (0).GetComponentInChildren<CanvasGroup>();
 
-		inventory = GameObject.FindGameObjectWithTag ("Inventory").GetComponent<Inventory>();
+		//inventory = GameObject.FindGameObjectWithTag ("Inventory").GetComponent<Inventory>();
+        inventory = go_inventory.GetComponent<Inventory>();
 		img_tooltip = GameObject.Find ("Tooltip").GetComponent<Image>();									// Return Tooltip game object's Image component
 		tooltipCanvas = img_tooltip.GetComponent<CanvasGroup>();											// Return Tooltip's CanvasGroup component
 		//fl_offset = tooltip.rectTransform.sizeDelta.x / 2;												// Offset for rotation pivot
 
-		bronzeGrid = GameObject.Find ("BronzeGrid");
-		silverGrid = GameObject.Find ("SilverGrid");
+		//bronzeGrid = GameObject.Find ("BronzeGrid");
+        //bronzeGrid = GameManager.Instance.bronzeGrid.gameObject;
+		//silverGrid = GameObject.Find ("SilverGrid");
+        //silverGrid = GameManager.Instance.silverGrid.gameObject;
 
-		bronzeList = bronzeGrid.GetComponent<GridLayout>().GridSlots;
+        bronzeList = bronzeGrid.GetComponent<GridLayout>().GridSlots;
 		silverList = silverGrid.GetComponent<GridLayout>().GridSlots;
 
 		mousedOverGrid = null;

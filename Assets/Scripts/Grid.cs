@@ -58,15 +58,21 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 
 	void Start ()
 	{
-		bronzeLayout = GameObject.FindGameObjectWithTag ("Bronze").GetComponent<GridLayout> ();
+        //bronzeLayout = GameObject.FindWithTag ("Bronze").GetComponent<GridLayout> ();
+        bronzeLayout = GameManager.Instance.bronzeGrid;
 		gridLayout = GetComponentInParent<GridLayout> ();
 
 		decay = 1F;
 
-		if (transform.parent.tag == "Bronze")
-			isBronze = true;
-		if (transform.parent.tag == "Silver")
-			isSilver = true;
+		//if (transform.parent.tag == "Bronze")
+		//	isBronze = true;
+		//if (transform.parent.tag == "Silver")
+		//	isSilver = true;
+
+        if (gridLayout.gridType == GridType.Bronze)
+            isBronze = true;
+        else
+            isSilver = true;
 	}
 
 	void LateUpdate ()
@@ -122,7 +128,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 	{
 		if (img_pipe.sprite == null && img_tooltip.sprite != null)
 		{
-			if (transform.parent.tag == "Bronze" && Slot.clickedPipe.pipeType == Pipe.PipeType.Bronze && FundManager.totalFund >= Slot.clickedPipe.pipePrice)
+			if (gridLayout.gridType.Equals(GridType.Bronze) && Slot.clickedPipe.pipeType == Pipe.PipeType.Bronze && FundManager.totalFund >= Slot.clickedPipe.pipePrice)
 			{
 				pipe = new Pipe (Slot.clickedPipe.pipeName, Slot.clickedPipe.pipeID, Slot.clickedPipe.pipePrice,
 				                 Slot.clickedPipe.pipeAmount, Pipe.PipeType.Bronze,
@@ -145,7 +151,7 @@ public class Grid : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 				AudioManager.Instance.RandomizeSFX(AudioDatabase.fundsound1, AudioDatabase.fundsound2);
 			}
 
-			if (transform.parent.tag == "Silver" && Slot.clickedPipe.pipeType == Pipe.PipeType.Silver && FundManager.totalFund >= Slot.clickedPipe.pipePrice)
+			if (gridLayout.gridType.Equals(GridType.Silver) && Slot.clickedPipe.pipeType == Pipe.PipeType.Silver && FundManager.totalFund >= Slot.clickedPipe.pipePrice)
 			{
 				pipe = new Pipe (Slot.clickedPipe.pipeName, Slot.clickedPipe.pipeID, Slot.clickedPipe.pipePrice,
 				                 Slot.clickedPipe.pipeAmount, Pipe.PipeType.Silver,

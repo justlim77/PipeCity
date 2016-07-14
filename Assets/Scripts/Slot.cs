@@ -28,7 +28,8 @@ public class Slot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IP
 		priceText = priceImage.transform.GetChild (0).GetComponent<Text> ();
 		priceImage.SetActive (false);
 
-		_inventory = GameObject.FindGameObjectWithTag ("Inventory").GetComponent<Inventory> ();
+        //_inventory = GameObject.FindWithTag ("Inventory").GetComponent<Inventory> ();
+        _inventory = GameManager.Instance.inventory;
 		_pipeImage = gameObject.transform.GetChild (0).GetComponent<Image> ();
 
 		selectedPipe = _inventory.Pipes [slotNumber + 1];	// +1 to compensate for [0] default empty pipe

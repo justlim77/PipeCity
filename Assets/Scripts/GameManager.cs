@@ -2,11 +2,24 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : MonoBehaviour
+{
+    public static GameManager Instance { get; private set; }
+    public GridLayout bronzeGrid;
+    public GridLayout silverGrid;
+
+    public Inventory inventory;
 
 	void Awake ()
 	{
+        if (Instance == null)
+            Instance = this;
 	}
+
+    void OnDestroy()
+    {
+        Instance = null;
+    }
 	
 	void Update()
 	{

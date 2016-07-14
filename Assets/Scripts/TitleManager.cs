@@ -2,9 +2,16 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class TitleManager : MonoBehaviour {
+public class TitleManager : MonoBehaviour
+{
+    public AudioClip bgm;
 
 	[SerializeField] Fader fader;
+
+    void Start()
+    {
+        AudioManager.Instance.PlayBGM(bgm);
+    }
 
 	void Update()
 	{

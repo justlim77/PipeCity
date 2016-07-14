@@ -2,7 +2,14 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class EndGameManager : MonoBehaviour {
+public class EndGameManager : MonoBehaviour
+{
+    public AudioClip bgm;
+
+    void Start()
+    {
+        AudioManager.Instance.PlayBGM(bgm);
+    }
 
 	public void BackToMain (bool isClicked)
 	{

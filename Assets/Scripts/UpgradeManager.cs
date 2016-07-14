@@ -56,11 +56,12 @@ public class UpgradeManager : MonoBehaviour {
 		desalinationTooltip = GameObject.Find ("DesalinationTooltipPanel").gameObject;
 		desalinationTooltip.SetActive (false);
 
-		bronzeLayout = GameObject.FindGameObjectWithTag ("Bronze").GetComponent <GridLayout> ();
+		//bronzeLayout = GameObject.FindGameObjectWithTag ("Bronze").GetComponent <GridLayout> ();
 	}
 
 	void Start ()
 	{
+        bronzeLayout = GameManager.Instance.bronzeGrid;
 		catchmentUpgrade1 = catchmentPrice * 2;
 		catchmentUpgrade2 = catchmentUpgrade1 + catchmentPrice;
 		catchmentUpgrade3 = catchmentUpgrade2 + catchmentPrice;

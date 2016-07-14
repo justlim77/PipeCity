@@ -30,7 +30,7 @@ public class PreviousButton : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 		{
 			if(this.GetComponent<Button>().interactable == true)
 			{
-				audioSource.PlayOneShot(buttonClickSound);
+                AudioManager.Instance.PlaySFX(buttonClickSound);
 			}
 			NextButton.helpPage -= 1;
 			if(NextButton.helpPage < 2)
@@ -44,7 +44,7 @@ public class PreviousButton : MonoBehaviour, IPointerDownHandler, IPointerEnterH
 	{
 		if(this.GetComponent<Button>().interactable == true)
 		{
-			audioSource.PlayOneShot(buttonHoverSound);
+            AudioManager.Instance.PlaySFX(buttonHoverSound);
 		}
 	}
 
