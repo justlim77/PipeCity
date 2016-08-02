@@ -16,4 +16,12 @@ public class EndGameManager : MonoBehaviour
 		if (isClicked)
 			SceneManager.LoadScene(0);
 	}
+
+    void Update()
+    {
+        if (Input.anyKeyDown || Input.GetMouseButtonDown(0))
+        {
+            BackToMain(true);
+        }
+    }
 }

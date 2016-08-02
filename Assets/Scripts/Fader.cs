@@ -1,8 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Fader : MonoBehaviour {
+#if UNITY_5_3_OR_NEWER
+using UnityEngine.SceneManagement;
+#endif
 
+public class Fader : MonoBehaviour
+{
 	public Texture2D fadeOutTexture;
 	public float fadeSpeed = 0.8f;
 
@@ -27,10 +31,22 @@ public class Fader : MonoBehaviour {
 		return(fadeSpeed);
 	}
 
-	void OnLevelWasLoaded()
+    void Start()
+    {
+        SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+    }
+
+    private void SceneManager_sceneLoaded(Scene arg0, LoadSceneMode arg1)
+    {
+        //alpha = 1;
+        BeginFade(-1);
+    }
+
+#if !UNITY_5_3_OR_NEWER
+    void OnLevelWasLoaded()
 	{
 		//alpha = 1;
 		BeginFade(-1);
 	}
-
+#endif
 }

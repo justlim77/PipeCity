@@ -1,20 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RainManager : MonoBehaviour {
+public class RainManager : MonoBehaviour
+{
+	public ParticleSystem RainParticles;
+	public bool IsRaining
+    {
+        get;
+        private set;
+    }
 
-	public ParticleSystem rain;
-	public bool isRaining;
+	public AudioSource _AudioSource;
+	public float RainInterval = 5f;
 
-	public int rainInterval = 5;
-	public float rainCounter = 0;
-	public float rainDuration = 0;
+	float _RainCounter = 0f;
+	float _RainDuration = 0f;
 
-	public AudioSource audioSource;
 	
 	void Start ()
 	{
-
+        RainParticles.loop = false;
+        _AudioSource = GetComponent<AudioSource>();
 	}
 
 	void Update ()
@@ -24,37 +30,51 @@ public class RainManager : MonoBehaviour {
 
 	void RandomRain ()
 	{
-		if (rain.isPlaying == false) {
-			isRaining = false;
-			rainCounter += 1 * Time.deltaTime;
+		if (!RainParticles.isPlaying)
+        {
+			IsRaining = false;
+			_RainCounter += 1 * Time.deltaTime;
 		}
 
-		if (rainCounter > rainInterval) {
-			rainDuration += 1 * Time.deltaTime;
-			rain.Play ();
-			rain.loop = false;
-			isRaining = true;
-			if(!audioSource.isPlaying)
+		if (_RainCounter > RainInterval)
+        {
+            // Increment rain duration
+            _RainDuration += 1 * Time.deltaTime;
+
+            // Play rain particles
+            if (!RainParticles.isPlaying)
+            {
+                RainParticles.Play ();
+			    IsRaining = true;
+            }
+
+            // Play rain sound
+            if (!_AudioSource.isPlaying)
+            {
 				PlayRainSound();
+            }
 		}
 
-		if (rainDuration > rainInterval) {
-			rain.Stop ();
-			rainCounter = 0;
-			rainDuration = 0;
+		if (_RainDuration >= RainInterval)
+        {
+            if(RainParticles.isPlaying)
+			    RainParticles.Stop();
+            RainInterval = Random.Range(5f, 10f);
+			_RainCounter = 0;
+			_RainDuration = 0;
 			StopPlayRainSound();
 		}
 
-        audioSource.mute = InputManager2._isPaused;
+        _AudioSource.mute = InputManager2._isPaused;
     }
 
 	void PlayRainSound()
 	{
-		audioSource.Play ();
+		_AudioSource.Play();
 	}
 
 	void StopPlayRainSound()
 	{
-		audioSource.Stop();
-	}
+		_AudioSource.Stop();
+	}    
 }

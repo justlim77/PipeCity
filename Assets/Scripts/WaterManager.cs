@@ -143,7 +143,7 @@ public class WaterManager : MonoBehaviour {
 	
 	public float ComputeOutputRate (float rain, float waste, float sea)
 	{
-		if (!rainManager.isRaining)
+		if (!rainManager.IsRaining)
 			rain = 0;
 		if (!hasReclamation)
 			waste = 0;
@@ -180,7 +180,7 @@ public class WaterManager : MonoBehaviour {
 
 	void ConditionalOutput ()
 	{
-		if (rainManager.isRaining) {
+		if (rainManager.IsRaining) {
 			//ComputeTotalOutput (rainWaterOutput, 0, seaWaterOutput);
 			currentWater += RainWaterOutput + WasteWaterOutput + SeaWaterOutput;
 		} else {
